@@ -1,5 +1,7 @@
 import Navbar from "./components/Navbar";
 
+import ThemeToggle from "./components/ThemeToggle";
+
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
@@ -13,6 +15,7 @@ import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import Footer from "./components/Footer";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
@@ -58,6 +61,7 @@ const App = () => {
       </Routes>
 
       <Toaster />
+      <Footer />
     </div>
   );
 };

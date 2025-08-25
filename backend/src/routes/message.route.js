@@ -5,8 +5,12 @@ import {
   getUsersForSidebar,
   sendMessage,
 } from "../controllers/message.controller.js";
+import { clearChat } from "../controllers/message.controller.js";
 
 const router = express.Router();
+
+// Clear chat between logged-in user & selected user
+router.delete("/clear/:receiverId", protectRoute, clearChat);
 
 router.get("/users", protectRoute, getUsersForSidebar);
 router.get("/:id", protectRoute, getMessages);

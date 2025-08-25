@@ -4,6 +4,29 @@ import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
 import { getReceiverSocketId, io } from "../lib/socket.js";
 
+
+// Clear all chat messages between two users
+export const clearChat = async (req, res) => {
+  try {
+    const { receiverId } = req.params;
+    const senderId = req.user._id;
+
+    // Delete all messages where the sender & receiver match both ways
+    await Message.deleteMany({
+      $or: [
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
+    });
+
+    res.status(200).json({ message: "Chat cleared successfully ✅" });
+  } catch (error) {
+    console.error("Error clearing chat:", error);
+    res.status(500).json({ message: "Failed to clear chat ❌" });
+  }
+};
+
+
 export const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;

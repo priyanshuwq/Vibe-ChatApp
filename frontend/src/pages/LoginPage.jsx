@@ -1,129 +1,120 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import AuthImagePattern from "../components/AuthImagePattern";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 
-const LoginPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { login, isLoggingIn } = useAuthStore();
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // Import login function from store
+  const { login } = useAuthStore();
+
+  // ✅ Handle Login Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(formData);
+    setLoading(true);
+
+    try {
+      // ✅ Pass email & password as an OBJECT
+      await login({ email, password });
+
+      // ✅ Redirect to homepage on success
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert(error.response?.data?.message || "Invalid email or password!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="h-screen grid lg:grid-cols-2">
-      {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="flex flex-col items-center gap-2 group">
-              <div
-                className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20
-              transition-colors"
-              >
-                <MessageSquare className="w-6 h-6 text-primary" />
-              </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
-              <p className="text-base-content/60">Sign in to your account</p>
-            </div>
-          </div>
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-black items-center justify-center px-4 relative">
+      {/* Background Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,28,135,0.2),transparent_60%)] pointer-events-none"></div>
+
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 items-center gap-10 z-10">
+        {/* Left Section - Login Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-base-100/10 backdrop-blur-2xl shadow-xl rounded-2xl p-8 sm:p-10 border border-gray-700"
+        >
+          <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-purple-400 via-blue-400 to-purple-600 bg-clip-text text-transparent">
+            Welcome Back.
+          </h1>
+          <p className="mt-2 text-gray-400 text-center">
+            Sign in to your account and start chatting!
+          </p>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
-                </div>
-                <input
-                  type="email"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            {/* Email */}
+            <div>
+              <label className="block text-gray-300 mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="priyanshu@gmail.com"
+                required
+                className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition"
+              />
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Password</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
-                  )}
-                </button>
-              </div>
+            {/* Password */}
+            <div>
+              <label className="block text-gray-300 mb-2">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition"
+              />
             </div>
 
-            <button
+            {/* Sign In Button */}
+            <motion.button
               type="submit"
-              className="btn btn-primary w-full"
-              disabled={isLoggingIn}
+              whileTap={{ scale: 0.97 }}
+              disabled={loading}
+              className="w-full py-3 text-lg font-semibold rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 transition shadow-lg"
             >
-              {isLoggingIn ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Sign in"
-              )}
-            </button>
+              {loading ? "Signing In..." : "Sign In"}
+            </motion.button>
           </form>
 
-          <div className="text-center">
-            <p className="text-base-content/60">
-              Don&apos;t have an account?{" "}
-              <Link to="/signup" className="link link-primary">
-                Create account
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
+          {/* Sign Up Link */}
+          <p className="text-center text-gray-400 mt-5">
+            Don’t have an account?{" "}
+            <Link to="/signup" className="text-purple-400 hover:underline">
+              Create one
+            </Link>
+          </p>
+        </motion.div>
 
-      {/* Right Side - Image/Pattern */}
-      <AuthImagePattern
-        title={"Welcome back!"}
-        subtitle={
-          "Sign in to continue your conversations and catch up with your messages."
-        }
-      />
+        {/* Right Section - Illustration */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="hidden lg:flex items-center justify-center"
+        >
+          <motion.img
+            src="/chat-illustration.svg"
+            alt="Chat Illustration"
+            draggable="false"
+            className="max-w-md"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      </div>
     </div>
   );
-};
-export default LoginPage;
+}
