@@ -48,22 +48,21 @@ const Navbar = () => {
           {/* Dark Mode Toggle */}
           <ThemeToggle />
 
-          {/* Profile Image */}
+          {/* Profile Image (non-interactive) */}
           {authUser && (
-            <Link to="/profile" className="relative group">
+            <div className="relative group">
               <motion.img
                 src={authUser.profilePic || defaultAvatar}
                 alt="User Avatar"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-10 h-10 rounded-full border-2 border-primary shadow-md cursor-pointer hover:scale-110 transition-transform"
+                className="w-10 h-10 rounded-full border-2 border-primary shadow-md"
               />
-              {/* Tooltip for Profile */}
               <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-base-300 text-xs text-base-content px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
                 {authUser.fullName || "My Profile"}
               </span>
-            </Link>
+            </div>
           )}
 
           {/* Settings Icon → hidden on login & signup */}
@@ -79,7 +78,10 @@ const Navbar = () => {
           {/* Logout Button */}
           {authUser && (
             <button
-              onClick={logout}
+              onClick={() => {
+                logout();
+                navigate("/login"); // redirect after logout
+              }}
               className="btn btn-sm btn-error gap-2 hover:scale-105 transition-transform"
             >
               <LogOut className="w-4 h-4" />

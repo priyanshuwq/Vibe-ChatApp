@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { axiosInstance } from "../lib/axios.js";
+import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const BASE_URL =
-  import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
+const BASE_URL = import.meta.env.DEV ? "http://localhost:5001" : "/";
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -15,120 +14,82 @@ export const useAuthStore = create((set, get) => ({
   onlineUsers: [],
   socket: null,
 
-  // ✅ Check Auth on App Load
+  // check whether cookie / session exists on load
   checkAuth: async () => {
+    set({ isCheckingAuth: true });
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authUser: res.data });
       get().connectSocket();
     } catch (error) {
-      console.log("Error in checkAuth:", error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
     }
   },
 
-  // ✅ Signup
   signup: async (data) => {
     set({ isSigningUp: true });
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
-      toast.success("Account created successfully");
+      toast.success("Account created");
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Signup failed");
     } finally {
       set({ isSigningUp: false });
     }
   },
 
-  // ✅ Login
   login: async (data) => {
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
-      toast.success("Logged in successfully");
+      toast.success("Logged in");
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Login failed");
     } finally {
       set({ isLoggingIn: false });
     }
   },
 
-  // ✅ Logout
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      toast.success("Logged out successfully");
+      toast.success("Logged out");
       get().disconnectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Logout failed");
     }
   },
 
-  // ✅ Update Full Name + Email (Settings Page)
-  updateAccountInfo: async (data) => {
+  updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
     try {
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
-      toast.success("Account info updated successfully");
+      toast.success("Profile updated");
     } catch (error) {
-      console.log("Error updating account info:", error);
-      toast.error(error.response?.data?.message || "Failed to update account");
+      toast.error(error?.response?.data?.message || "Update failed");
     } finally {
       set({ isUpdatingProfile: false });
     }
   },
 
-  // ✅ Update Profile Picture (Cloudinary Integration)
-  updateProfilePic: async (file) => {
-    if (!file) {
-      toast.error("Please select an image first!");
-      return;
-    }
-
-    // Restrict image size to 2MB
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("File size exceeds 2MB limit");
-      return;
-    }
-
-    set({ isUpdatingProfile: true });
-    try {
-      const formData = new FormData();
-      formData.append("profilePic", file);
-
-      const res = await axiosInstance.post(
-        "/auth/upload-profile-pic",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      set({ authUser: res.data });
-      toast.success("Profile picture updated successfully");
-    } catch (error) {
-      console.log("Error uploading profile picture:", error);
-      toast.error(error.response?.data?.message || "Failed to upload image");
-    } finally {
-      set({ isUpdatingProfile: false });
-    }
-  },
-
-  // ✅ Connect Socket
+  // socket
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
     const socket = io(BASE_URL, {
-      query: { userId: authUser._id },
+      query: {
+        userId: authUser._id,
+      },
+      transports: ["websocket"],
     });
     socket.connect();
 
@@ -139,8 +100,10 @@ export const useAuthStore = create((set, get) => ({
     });
   },
 
-  // ✅ Disconnect Socket
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
+    set({ socket: null });
   },
+
+  setAuthUser: (user) => set({ authUser: user }),
 }));

@@ -40,12 +40,12 @@ const Sidebar = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-200 relative shadow-sm
-                    ${
-                      selectedUser?._id === user._id
-                        ? "bg-primary/10 ring-2 ring-primary shadow-md"
-                        : "hover:bg-base-300"
-                    }`}
+                  className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden
+  ${
+    selectedUser?._id === user._id
+      ? "bg-primary/15 shadow-md scale-[1.02] before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary before:rounded-r-md before:shadow-[0_0_10px_rgba(139,92,246,0.7)]"
+      : "hover:bg-base-200 hover:shadow-sm"
+  }`}
                 >
                   {/* Profile Image */}
                   <div className="relative flex-shrink-0">

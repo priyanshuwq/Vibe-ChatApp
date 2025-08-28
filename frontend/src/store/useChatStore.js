@@ -16,33 +16,38 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to load users");
     } finally {
       set({ isUsersLoading: false });
     }
   },
- 
+
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to load messages");
     } finally {
       set({ isMessagesLoading: false });
     }
   },
-  sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get();
+
+  sendMessage: async (receiverId, text, image) => {
     try {
       const res = await axiosInstance.post(
-        `/messages/send/${selectedUser._id}`,
-        messageData
+        `/messages/send/${receiverId}`,
+        { text, image }, // backend expects JSON with text + base64 image
+        { headers: { "Content-Type": "application/json" } }
       );
-      set({ messages: [...messages, res.data] });
+
+      set((state) => ({
+        messages: [...state.messages, res.data],
+      }));
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Send message error:", error);
+      toast.error(error.response?.data?.message || "Failed to send message");
     }
   },
 

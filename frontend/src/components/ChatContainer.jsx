@@ -1,49 +1,51 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
+import { useThemeStore } from "../store/useThemeStore"; // ✅ Zustand for theme
 import MessageInput from "./MessageInput";
-import { motion, AnimatePresence } from "framer-motion";
-import { Trash2, X } from "lucide-react";
-import axios from "axios";
+import { motion } from "framer-motion";
 
 const ChatContainer = () => {
-  const {
-    getMessages,
-    messages,
-    selectedUser,
-    isMessagesLoading,
-    setSelectedUser,
-  } = useChatStore();
-  const { socket, authUser, onlineUsers } = useAuthStore();
+  const { getMessages, messages, selectedUser, isMessagesLoading } =
+    useChatStore();
 
+  const { socket, authUser } = useAuthStore();
+  const { theme } = useThemeStore();
   const [typingUser, setTypingUser] = useState(null);
-  const [showClearModal, setShowClearModal] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Fetch messages when user changes
+  // Fetch messages when selected user changes
   useEffect(() => {
-    if (selectedUser) getMessages(selectedUser._id);
+    if (!selectedUser) return;
+
+    getMessages(selectedUser._id);
+
+    if (useChatStore.getState().subscribeToMessages) {
+      useChatStore.getState().subscribeToMessages();
+    }
+
+    return () => {
+      if (useChatStore.getState().unsubscribeFromMessages) {
+        useChatStore.getState().unsubscribeFromMessages();
+      }
+    };
   }, [selectedUser, getMessages]);
 
-  // Scroll to the latest message
+  // Auto-scroll on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Typing indicator socket events
+  // Typing indicator setup
   useEffect(() => {
     if (!socket) return;
 
     socket.on("userTyping", ({ senderId }) => {
-      if (senderId === selectedUser?._id) {
-        setTypingUser(selectedUser.fullName);
-      }
+      if (senderId === selectedUser?._id) setTypingUser(senderId);
     });
 
     socket.on("stopTyping", ({ senderId }) => {
-      if (senderId === selectedUser?._id) {
-        setTypingUser(null);
-      }
+      if (senderId === selectedUser?._id) setTypingUser(null);
     });
 
     return () => {
@@ -52,174 +54,137 @@ const ChatContainer = () => {
     };
   }, [socket, selectedUser]);
 
-  // Clear chat API
-  const handleClearChat = async () => {
-    try {
-      await axios.delete(`/messages/clear/${selectedUser._id}`);
-      getMessages(selectedUser._id); // Refresh after deletion
-      setShowClearModal(false);
-    } catch (error) {
-      console.error("Error clearing chat:", error);
-    }
-  };
-
-  if (!selectedUser) {
-    return (
-      <div className="flex-1 flex items-center justify-center text-zinc-500">
-        Select a contact to start chatting 💬
-      </div>
-    );
-  }
-
-  // Check user online status properly
-  const isOnline = onlineUsers.includes(selectedUser._id);
-
   return (
-    <div className="flex flex-col flex-1 bg-base-100 rounded-lg shadow-md">
+    <div
+      className={`flex flex-col h-full w-full transition-colors duration-300 ${
+        theme === "dark" ? "bg-[#0f0f0f]" : "bg-gray-100"
+      }`}
+    >
       {/* Chat Header */}
-      <div className="flex items-center justify-between p-4 border-b border-base-300 bg-base-200 rounded-t-lg">
-        <div className="flex items-center gap-3">
-          <img
-            src={selectedUser.profilePic || "/avatar.png"}
-            alt="Profile"
-            className="size-10 rounded-full border border-base-300"
-          />
-          <div>
-            <h2 className="font-semibold text-base-content">
-              {selectedUser.fullName}
-            </h2>
+      <div
+        className={`px-5 py-3 flex items-center gap-3 border-b shadow-md transition-colors duration-300 ${
+          theme === "dark"
+            ? "bg-[#1f1f1f] border-gray-800"
+            : "bg-white border-gray-200"
+        }`}
+      >
+        <img
+          src={selectedUser?.profilePic || "/avatar.png"}
+          alt="User"
+          className="w-10 h-10 rounded-full object-cover border border-gray-500"
+        />
+        <div>
+          <h2
+            className={`font-semibold ${
+              theme === "dark" ? "text-white" : "text-gray-800"
+            }`}
+          >
+            {selectedUser?.fullName}
+          </h2>
+          {typingUser ? (
+            <p className="text-sm text-green-400">Typing...</p>
+          ) : (
             <p
-              className={`text-sm ${
-                typingUser
-                  ? "text-primary animate-pulse"
-                  : isOnline
-                  ? "text-green-500"
-                  : "text-zinc-400"
+              className={`text-xs ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}
             >
-              {typingUser
-                ? `${typingUser} is typing...`
-                : isOnline
-                ? "Online"
-                : "Offline"}
+              Online
             </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Clear Chat */}
-          <button
-            onClick={() => setShowClearModal(true)}
-            className="btn btn-sm btn-error gap-1"
-            title="Clear Chat"
-          >
-            <Trash2 className="size-4" />
-          </button>
-
-          {/* Close Chat */}
-          <button
-            onClick={() => setSelectedUser(null)}
-            className="btn btn-sm btn-neutral gap-1"
-            title="Close Chat"
-          >
-            <X className="size-4" />
-          </button>
+          )}
         </div>
       </div>
 
       {/* Messages Section */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-base-100">
-        {messages.map((msg, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className={`chat ${
-              msg.senderId === authUser._id ? "chat-end" : "chat-start"
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        {isMessagesLoading ? (
+          <p
+            className={`text-center ${
+              theme === "dark" ? "text-gray-400" : "text-gray-600"
             }`}
           >
-            {/* Show profile pics beside messages */}
-            <div className="chat-image avatar">
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-base-300">
-                <img
-                  src={
-                    msg.senderId === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
-                  }
-                  alt="User"
-                />
-              </div>
-            </div>
+            Loading messages...
+          </p>
+        ) : messages.length > 0 ? (
+          messages.map((msg, index) => {
+            const isSender = msg.senderId === authUser?._id;
 
-            <div
-              className={`chat-bubble ${
-                msg.senderId === authUser._id
-                  ? "bg-primary text-white"
-                  : "bg-base-300 text-base-content"
-              }`}
-            >
-              {/* If message has image, show it */}
-              {msg.image ? (
-                <img
-                  src={msg.image}
-                  alt="Attachment"
-                  className="rounded-lg max-w-xs mb-1"
-                />
-              ) : null}
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`flex ${isSender ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`relative max-w-[70%] px-4 py-2 rounded-2xl shadow-md transition-all duration-300 ${
+                    isSender
+                      ? "bg-blue-500 text-white rounded-br-none"
+                      : theme === "dark"
+                      ? "bg-[#1e1e1e] text-gray-100 rounded-bl-none"
+                      : "bg-white text-gray-900 rounded-bl-none"
+                  }`}
+                >
+                  {/* Message Text */}
+                  {msg.text && (
+                    <p className="text-[15px] leading-relaxed break-words mb-1">
+                      {msg.text}
+                    </p>
+                  )}
 
-              {msg.text}
-            </div>
-          </motion.div>
-        ))}
+                  {/* Image Message */}
+                  {msg.image && (
+                    <div className="mt-2">
+                      <img
+                        src={msg.image}
+                        alt="attachment"
+                        className="max-w-xs rounded-lg shadow-md border border-gray-600"
+                      />
+                    </div>
+                  )}
+
+                  {/* Timestamp */}
+                  <span
+                    className={`block text-right mt-1 text-[11px] ${
+                      isSender
+                        ? "text-white/70"
+                        : theme === "dark"
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {new Date(msg.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })
+        ) : (
+          <p
+            className={`text-center ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            No messages yet
+          </p>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Message Input with Image Upload */}
-      <MessageInput selectedUser={selectedUser} />
-
-      {/* Confirmation Modal */}
-      <AnimatePresence>
-        {showClearModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-          >
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              transition={{ duration: 0.2 }}
-              className="bg-base-100 shadow-lg rounded-xl p-6 w-[95%] max-w-sm text-center"
-            >
-              <h3 className="text-lg font-bold text-base-content">
-                Clear Chat with {selectedUser.fullName}?
-              </h3>
-              <p className="text-sm text-zinc-400 mt-2">
-                This action cannot be undone. All messages will be deleted.
-              </p>
-
-              <div className="flex justify-center gap-3 mt-6">
-                <button
-                  onClick={handleClearChat}
-                  className="btn btn-error btn-sm"
-                >
-                  Yes, Clear
-                </button>
-                <button
-                  onClick={() => setShowClearModal(false)}
-                  className="btn btn-neutral btn-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Message Input */}
+      <div
+        className={`border-t transition-colors duration-300 ${
+          theme === "dark"
+            ? "border-gray-800 bg-[#1f1f1f]"
+            : "border-gray-200 bg-white"
+        }`}
+      >
+        <MessageInput selectedUser={selectedUser} />
+      </div>
     </div>
   );
 };

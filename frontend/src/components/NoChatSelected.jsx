@@ -1,33 +1,43 @@
+import { motion } from "framer-motion";
 import { MessageSquare } from "lucide-react";
 
 const NoChatSelected = () => {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
-      <div className="max-w-md text-center space-y-6">
-        {/* Icon Display */}
-        <div className="flex justify-center gap-4 mb-4">
-          <div className="relative">
-            <div
-              className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center
-             justify-center animate-bounce"
-            >
-              <MessageSquare className="w-8 h-8 text-primary " />
-            </div>
-          </div>
-        </div>
+    <div className="flex-1 flex items-center justify-center bg-base-200/40 backdrop-blur-lg">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="text-center px-6 py-10 rounded-2xl shadow-md bg-base-100/80 border border-base-300"
+      >
+        {/* Floating Icon */}
+        <motion.div
+          initial={{ y: -5 }}
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex justify-center mb-4"
+        >
+          <MessageSquare className="w-12 h-12 text-primary" />
+        </motion.div>
 
         {/* Welcome Text */}
-        <h2 className="text-2xl font-bold">Welcome to Vibe!</h2>
-        <p className="text-base-content/60">
-          Select a conversation from the sidebar to start chatting
-        </p>
-
-        {/* Developer Credit */}
-        <p className="mt-6 text-sm text-gray-400">
-          Developed with ❤️ by {""}
-          <span className="font-semibold text-primary">Priyanshu</span>
-        </p>
-      </div>
+        <motion.h2
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-xl font-semibold text-base-content mb-2"
+        >
+          Welcome to Vibe Chat 🎉
+        </motion.h2>
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-sm text-base-content/60"
+        >
+          Select a chat from the sidebar to start messaging.
+        </motion.p>
+      </motion.div>
     </div>
   );
 };

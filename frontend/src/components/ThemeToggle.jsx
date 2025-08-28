@@ -1,32 +1,47 @@
-import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext.jsx";
-import { Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
+import { useThemeStore } from "../store/useThemeStore";
+import { Moon, Sun } from "lucide-react";
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useThemeStore();
   const isDark = theme === "dark";
 
   return (
     <motion.button
       onClick={toggleTheme}
-      whileTap={{ scale: 0.9 }}
-      className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer shadow-md border transition-colors duration-300 ${
-        isDark
-          ? "bg-gray-800 border-gray-600 justify-end"
-          : "bg-yellow-300 border-yellow-400 justify-start"
-      }`}
+      initial={false}
+      animate={{ backgroundColor: isDark ? "#1f2937" : "#f3f4f6" }}
+      transition={{ duration: 0.3 }}
+      className="flex items-center justify-between w-16 h-8 rounded-full px-1 shadow-md border border-base-300 relative"
     >
+      {/* Sliding Knob */}
       <motion.div
+        className="absolute w-6 h-6 bg-white rounded-full shadow-md"
         layout
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        className="w-6 h-6 flex items-center justify-center rounded-full bg-white shadow-md"
+        transition={{
+          type: "spring",
+          stiffness: 700,
+          damping: 30,
+        }}
+        style={{
+          left: isDark ? "36px" : "2px",
+        }}
+      />
+
+      {/* Icons */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isDark ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
       >
-        {isDark ? (
-          <Moon className="w-4 h-4 text-indigo-500" />
-        ) : (
-          <Sun className="w-4 h-4 text-yellow-500" />
-        )}
+        <Moon className="size-4 text-yellow-400" />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isDark ? 0 : 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        <Sun className="size-4 text-yellow-500" />
       </motion.div>
     </motion.button>
   );

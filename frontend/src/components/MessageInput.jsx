@@ -1,102 +1,125 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { useAuthStore } from "../store/useAuthStore";
-import { Send } from "lucide-react";
-import { motion } from "framer-motion";
+import { useThemeStore } from "../store/useThemeStore"; // ✅ Dark mode sync
+import { Image, Send, X } from "lucide-react";
 
 const MessageInput = ({ selectedUser }) => {
   const { sendMessage } = useChatStore();
-  const { socket, authUser } = useAuthStore();
+  const { theme } = useThemeStore();
 
-  const [message, setMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const typingTimeoutRef = useRef(null);
+  const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  // Send message handler
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-
-    // Send the message
-    await sendMessage({ text: message });
-    setMessage("");
-
-    // Stop typing after sending
-    socket?.emit("stopTyping", {
-      senderId: authUser._id,
-      receiverId: selectedUser._id,
-    });
-    setIsTyping(false);
-  };
-
-  // Handle typing events
-  const handleTyping = (e) => {
-    setMessage(e.target.value);
-
-    if (!socket || !selectedUser) return;
-
-    // Emit typing event when user starts typing
-    if (!isTyping) {
-      setIsTyping(true);
-      socket.emit("userTyping", {
-        senderId: authUser._id,
-        receiverId: selectedUser._id,
-      });
+// Handle image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // ✅ base64 string
+        setPreview(reader.result); // still show preview
+      };
+      reader.readAsDataURL(file);
     }
-
-    // Reset typing timeout
-    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-
-    typingTimeoutRef.current = setTimeout(() => {
-      socket.emit("stopTyping", {
-        senderId: authUser._id,
-        receiverId: selectedUser._id,
-      });
-      setIsTyping(false);
-    }, 1500);
   };
 
-  // Stop typing if user clicks away or unmounts component
-  useEffect(() => {
-    return () => {
-      if (socket && isTyping && selectedUser) {
-        socket.emit("stopTyping", {
-          senderId: authUser._id,
-          receiverId: selectedUser._id,
-        });
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket, selectedUser, isTyping]);
+
+  // Handle send message
+  const handleSend = async (e) => {
+    if (e) e.preventDefault();
+    if (!text.trim() && !image) return;
+
+    await sendMessage(selectedUser._id, text, image);
+    setText("");
+    setImage(null);
+    setPreview(null);
+  };
+
+  // Handle Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // prevent newline
+      handleSend();
+    }
+  };
 
   return (
-    <motion.form
-      onSubmit={handleSendMessage}
-      className="flex items-center gap-3 p-3 border-t border-base-300 bg-base-100"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <div
+      className={`flex flex-col gap-2 p-3 border-t transition-colors duration-300 ${
+        theme === "dark"
+          ? "bg-[#1f1f1f] border-gray-700"
+          : "bg-white border-gray-300"
+      }`}
     >
-      {/* Input Field */}
-      <input
-        type="text"
-        value={message}
-        onChange={handleTyping}
-        placeholder="Type a message..."
-        className="input input-bordered flex-1 bg-base-200 text-base-content focus:outline-none"
-      />
+      {/* Image Preview */}
+      {preview && (
+        <div className="relative w-32">
+          <img
+            src={preview}
+            alt="preview"
+            className="rounded-lg shadow-md border border-gray-500"
+          />
+          <button
+            onClick={() => {
+              setImage(null);
+              setPreview(null);
+            }}
+            className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
-      {/* Send Button */}
-      <motion.button
-        type="submit"
-        className="btn btn-primary btn-circle"
-        disabled={!message.trim()}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <Send className="size-5" />
-      </motion.button>
-    </motion.form>
+      {/* Input Row */}
+      <div className="flex items-center">
+        {/* Upload Image Button */}
+        <label
+          htmlFor="chat-image"
+          className={`cursor-pointer p-2 rounded-full transition-colors duration-300 ${
+            theme === "dark"
+              ? "hover:bg-gray-800 text-gray-300"
+              : "hover:bg-gray-200 text-gray-600"
+          }`}
+        >
+          <Image size={22} />
+          <input
+            type="file"
+            id="chat-image"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+        </label>
+
+        {/* Input Field */}
+        <textarea
+          placeholder="Type a message..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          rows={1}
+          className={`flex-1 px-4 py-2 mx-3 rounded-xl border resize-none transition-all duration-300 focus:outline-none ${
+            theme === "dark"
+              ? "bg-[#2b2b2b] text-white placeholder-gray-400 border-gray-700 focus:border-blue-500"
+              : "bg-gray-100 text-gray-900 placeholder-gray-500 border-gray-300 focus:border-blue-500"
+          }`}
+        />
+
+        {/* Send Button */}
+        <button
+          onClick={handleSend}
+          className={`p-2 rounded-full transition-colors duration-300 ${
+            theme === "dark"
+              ? "bg-blue-600 hover:bg-blue-700 text-white"
+              : "bg-blue-500 hover:bg-blue-600 text-white"
+          }`}
+        >
+          <Send size={22} />
+        </button>
+      </div>
+    </div>
   );
 };
 
