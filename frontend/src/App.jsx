@@ -1,7 +1,4 @@
 import Navbar from "./components/Navbar";
-
-import ThemeToggle from "./components/ThemeToggle";
-
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
@@ -20,13 +17,9 @@ const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
 
-  console.log({ onlineUsers });
-
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
-  console.log({ authUser });
 
   if (isCheckingAuth && !authUser)
     return (
@@ -36,33 +29,38 @@ const App = () => {
     );
 
   return (
-    <div className="h-full w-full">
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar always at top */}
       <Navbar />
 
-      <Routes>
-        {/* Protected Home */}
-        <Route
-          path="/"
-          element={authUser ? <HomePage /> : <Navigate to="/login" />}
-        />
+      {/* Main content grows and pushes footer down */}
+      <main className="flex-grow">
+        <Routes>
+          {/* Protected Home */}
+          <Route
+            path="/"
+            element={authUser ? <HomePage /> : <Navigate to="/login" />}
+          />
 
-        {/* Public routes */}
-        <Route
-          path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-        />
+          {/* Public routes */}
+          <Route
+            path="/signup"
+            element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/login"
+            element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+          />
 
-        {/* Protected Settings */}
-        <Route
-          path="/settings"
-          element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
-        />
-      </Routes>
+          {/* Protected Settings */}
+          <Route
+            path="/settings"
+            element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </main>
 
+      {/* Toast + Footer */}
       <Toaster />
       <Footer />
     </div>

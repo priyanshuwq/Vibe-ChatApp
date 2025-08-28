@@ -5,26 +5,37 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const SettingsPage = () => {
-  const { authUser, updateProfilePic } = useAuthStore();
+  const { authUser, updateProfile } = useAuthStore();
   const [preview, setPreview] = useState(authUser?.profilePic);
-  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected) {
-      setFile(selected);
-      setPreview(URL.createObjectURL(selected));
+  // ✅ Handle file change and convert to base64
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // only allow image types
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      const base64Image = reader.result;
+      setPreview(base64Image);
+      handleUpload(base64Image); // auto-upload after selecting
+    };
   };
 
-  const handleUpload = async () => {
-    if (!file) return;
+  // ✅ Upload base64 to backend
+  const handleUpload = async (base64Image) => {
     try {
       setLoading(true);
-      await updateProfilePic(file);
-      toast.success("Profile updated!");
-      setFile(null); // hide Save button
+      await updateProfile({ profilePic: base64Image });
+      // toast.success("Profile updated!");
     } catch (err) {
       toast.error("Upload failed");
     } finally {
@@ -78,14 +89,8 @@ const SettingsPage = () => {
               Change Photo
             </label>
 
-            {file && (
-              <button
-                onClick={handleUpload}
-                disabled={loading}
-                className="px-4 py-1 text-sm bg-primary text-white rounded-lg shadow hover:scale-105 transition disabled:opacity-70"
-              >
-                {loading ? "Saving..." : "Save"}
-              </button>
+            {loading && (
+              <p className="text-xs text-gray-500">Uploading...</p>
             )}
           </div>
 
@@ -124,8 +129,7 @@ const SettingsPage = () => {
           </div>
           <ThemeToggle />
         </motion.div>
-
-        {/* Coffee Support Card */}
+{/* Coffee Support Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
