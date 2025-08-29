@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173"], // ✅ Change this to your client URL in prod
     methods: ["GET", "POST"],
   },
 });
@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
     console.log(`User ${userId} connected with socket ID: ${socket.id}`);
   }
 
-  // Notify all clients about online users
+  // ✅ Only send IDs of online users
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   // 🔹 Handle sending & receiving messages
@@ -35,7 +35,9 @@ io.on("connection", (socket) => {
     const { senderId, receiverId, message } = data;
 
     const receiverSocketId = userSocketMap[receiverId];
+    const senderSocketId = userSocketMap[senderId];
 
+    // Send to receiver (if online)
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("receiveMessage", {
         senderId,
@@ -43,9 +45,18 @@ io.on("connection", (socket) => {
         createdAt: new Date(),
       });
     }
+
+    // ✅ Also send back to sender instantly
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("receiveMessage", {
+        senderId,
+        message,
+        createdAt: new Date(),
+      });
+    }
   });
 
-  // 🔹 Handle disconnect
+  // Handle disconnect
   socket.on("disconnect", () => {
     console.log("A user disconnected:", socket.id);
     delete userSocketMap[userId];

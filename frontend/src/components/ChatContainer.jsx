@@ -81,17 +81,7 @@ const ChatContainer = () => {
           >
             {selectedUser?.fullName}
           </h2>
-          {typingUser ? (
-            <p className="text-sm text-green-400">Typing...</p>
-          ) : (
-            <p
-              className={`text-xs ${
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
-              Online
-            </p>
-          )}
+          {typingUser && <p className="text-sm text-green-400">Typing...</p>}
         </div>
       </div>
 

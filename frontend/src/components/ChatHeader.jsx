@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { X } from "lucide-react";
 
 const ChatHeader = () => {
-  const { selectedUser, setSelectedUser } = useChatStore();
+  const { selectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
   if (!selectedUser) return null;
@@ -40,9 +39,6 @@ const ChatHeader = () => {
         <h2 className="font-semibold text-base-content">
           {selectedUser.fullName}
         </h2>
-        <p className="text-xs text-base-content/60">
-          {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
-        </p>
       </div>
     </motion.div>
   );
