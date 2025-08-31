@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img width="512" height="512" alt="chat-logo" src="https://github.com/user-attachments/assets/bc15a778-49cf-489c-bab2-733567dd0143" />
+  <img width="180" height="180" alt="Vibe Chat Logo" src="https://github.com/user-attachments/assets/bc15a778-49cf-489c-bab2-733567dd0143" />
 </h1>
 
 <p align="center">
