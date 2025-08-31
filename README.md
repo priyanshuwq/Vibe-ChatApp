@@ -5,15 +5,6 @@
   <b>A modern, fast, and secure chat platform built with the MERN stack</b>
 </p>
 
-<p align="center">
-  <a href="https://vibe-chatapp.onrender.com" target="_blank">
-    <img src="https://img.shields.io/badge/Live_Demo-0078D7?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
-  </a>
-  <a href="https://github.com/priyanshushekhar07/Vibe-ChatApp" target="_blank">
-    <img src="https://img.shields.io/badge/View_Code-000000?style=for-the-badge&logo=github&logoColor=white" alt="View Code" />
-  </a>
-</p>
-
 ---
 
 ## 📌 Overview  
