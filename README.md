@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/vibe-banner.png" alt="Vibe Chat App" width="800">
+  <img width="512" height="512" alt="chat-logo" src="https://github.com/user-attachments/assets/bc15a778-49cf-489c-bab2-733567dd0143" />
 </h1>
 
 <p align="center">
@@ -24,7 +24,7 @@ Built using the **MERN Stack** with **Socket.IO**, it offers a **modern UI**, **
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-ReactJS-61DAFB?style=for-the-badge&logo=react" />
@@ -36,7 +36,7 @@ Built using the **MERN Stack** with **Socket.IO**, it offers a **modern UI**, **
 
 ---
 
-## 🔥 Features
+##  Features
 
 - 💬 **Real-time Messaging** — Powered by **Socket.IO**
 - 🔐 **User Authentication** — Secure login & signup with **JWT**
@@ -45,20 +45,3 @@ Built using the **MERN Stack** with **Socket.IO**, it offers a **modern UI**, **
 - 📷 **Profile Images & Media Support**
 - 📱 **Responsive UI for All Devices**
 - ⚡ **Fast & Smooth Performance**
-
----
-
-## 📸 Screenshots
-
-> These screenshots are **high-quality mockups** designed to match the **Vibe Chat App UI**.  
-> Place them inside the `screenshots/` folder.
-
-### 🔹 Login Page  
-![Login Page](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/login.png)
-
-### 🔹 Chat Dashboard  
-![Chat Dashboard](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/dashboard.png)
-
-### 🔹 Dark & Light Themes  
-![Themes](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/themes.png)
-
