@@ -1,16 +1,17 @@
-<h1 align="center">🚀 Vibe Chat App</h1>
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/vibe-banner.png" alt="Vibe Chat App" width="800">
+</h1>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/public/vibe-banner.png" alt="Vibe Chat App" width="800"/>
-</p>
-
-<p align="center">
-  <b>Real-time, fast, and secure chat platform built with MERN Stack</b>
+  <b>Experience Real-Time Conversations — A Modern Chat App Built with the MERN Stack</b>
 </p>
 
 <p align="center">
   <a href="https://vibe-chatapp.onrender.com" target="_blank">
-    <img src="https://img.shields.io/badge/🔗 Live%20Demo-blue?style=for-the-badge" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/🔗 Live%20Demo-0078D7?style=for-the-badge" alt="Live Demo" />
+  </a>
+  <a href="https://github.com/priyanshushekhar07/Vibe-ChatApp" target="_blank">
+    <img src="https://img.shields.io/github/stars/priyanshushekhar07/Vibe-ChatApp?style=for-the-badge&logo=github" alt="GitHub Stars" />
   </a>
 </p>
 
@@ -18,15 +19,15 @@
 
 ## ✨ About Vibe Chat App
 
-Vibe Chat App is a **real-time messaging platform** designed for seamless and secure conversations.  
-Built using the **MERN Stack** and powered by **Socket.IO**, it provides an **interactive, smooth, and modern** chatting experience.
+Vibe Chat App is a **real-time messaging platform** that lets you connect with people instantly.  
+Built using the **MERN Stack** with **Socket.IO**, it offers a **modern UI**, **fast performance**, and **secure authentication**.
 
 ---
 
 ## 🛠️ Tech Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Frontend-ReactJS-61DBFB?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/Frontend-ReactJS-61DAFB?style=for-the-badge&logo=react" />
   <img src="https://img.shields.io/badge/Backend-NodeJS-3C873A?style=for-the-badge&logo=node.js" />
   <img src="https://img.shields.io/badge/Database-MongoDB-4DB33D?style=for-the-badge&logo=mongodb" />
   <img src="https://img.shields.io/badge/RealTime-Socket.IO-black?style=for-the-badge&logo=socket.io" />
@@ -37,16 +38,20 @@ Built using the **MERN Stack** and powered by **Socket.IO**, it provides an **in
 
 ## 🔥 Features
 
-- 💬 **Real-time Messaging** — Powered by **Socket.IO**  
-- 👤 **User Authentication** — Login & Signup with **JWT**  
-- 🟢 **Online/Offline Status Tracking**  
-- 📷 **Profile Image & Media Support**  
-- 🌓 **Dark & Light Mode**  
-- ⚡ **Responsive & Fast UI**  
+- 💬 **Real-time Messaging** — Powered by **Socket.IO**
+- 🔐 **User Authentication** — Secure login & signup with **JWT**
+- 🟢 **Online/Offline User Status**
+- 🌓 **Dark & Light Mode Support**
+- 📷 **Profile Images & Media Support**
+- 📱 **Responsive UI for All Devices**
+- ⚡ **Fast & Smooth Performance**
 
 ---
 
 ## 📸 Screenshots
+
+> These screenshots are **high-quality mockups** designed to match the **Vibe Chat App UI**.  
+> Place them inside the `screenshots/` folder.
 
 ### 🔹 Login Page  
 ![Login Page](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/login.png)
@@ -54,11 +59,6 @@ Built using the **MERN Stack** and powered by **Socket.IO**, it provides an **in
 ### 🔹 Chat Dashboard  
 ![Chat Dashboard](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/dashboard.png)
 
----
+### 🔹 Dark & Light Themes  
+![Themes](https://raw.githubusercontent.com/priyanshushekhar07/Vibe-ChatApp/main/screenshots/themes.png)
 
-## 🚀 Getting Started
-
-### 1️⃣ Clone the repository  
-```bash
-git clone https://github.com/priyanshushekhar07/Vibe-ChatApp.git
-cd Vibe-ChatApp
