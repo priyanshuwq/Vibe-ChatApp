@@ -41,9 +41,6 @@ With **real-time messaging**, **dark & light modes**, and **media sharing**, it'
   <a href="https://vibe-chatapp.onrender.com" target="_blank">
     <img src="https://img.shields.io/badge/Try_Now-4CAF50?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
   </a>
-  <a href="https://github.com/priyanshushekhar07/Vibe-ChatApp" target="_blank">
-    <img src="https://img.shields.io/badge/Source_Code-000000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  </a>
 </p>
 
 
