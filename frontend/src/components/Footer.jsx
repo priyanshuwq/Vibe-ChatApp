@@ -10,12 +10,12 @@ const Footer = () => {
       className="w-full sticky bottom-0 left-0 border-t border-base-300 bg-base-200/30 backdrop-blur-md text-center py-2 z-50"
     >
       <div className="text-sm">
-        Developed by{" "}
-        <span className="font-semibold text-primary">Priyanshu</span>
+        Design & Developed by{" "}
+        <span className="font-bold">Priyanshu</span>
       </div>
       <div className="flex justify-center gap-6 mt-1">
         <a
-          href="https://github.com/priyanshushekhar07"
+          href="https://github.com/priyanshuwq"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-primary transition"
