@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { useThemeStore } from "../store/useThemeStore"; // ✅ Zustand for theme
+import { useThemeStore } from "../store/useThemeStore"; 
 import MessageInput from "./MessageInput";
 import { motion } from "framer-motion";
 

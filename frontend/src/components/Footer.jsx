@@ -11,9 +11,7 @@ const Footer = () => {
     >
       <div className="text-sm">
         Developed by{" "}
-        <span className="font-semibold text-primary">
-          Priyanshu Shekhar Singh
-        </span>
+        <span className="font-semibold text-primary">Priyanshu</span>
       </div>
       <div className="flex justify-center gap-6 mt-1">
         <a

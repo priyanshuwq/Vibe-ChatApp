@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { useThemeStore } from "../store/useThemeStore"; // ✅ Dark mode sync
+import { useThemeStore } from "../store/useThemeStore";
 import { Image, Send, X } from "lucide-react";
 
 const MessageInput = ({ selectedUser }) => {
@@ -17,13 +17,12 @@ const MessageInput = ({ selectedUser }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // ✅ base64 string
+        setImage(reader.result); // base64 string
         setPreview(reader.result); // still show preview
       };
       reader.readAsDataURL(file);
     }
   };
-
 
   // Handle send message
   const handleSend = async (e) => {

@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
     console.log(`User ${userId} connected with socket ID: ${socket.id}`);
   }
 
-  // ✅ Only send IDs of online users
+  //  Only send IDs of online users
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   // 🔹 Handle sending & receiving messages
@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    // ✅ Also send back to sender instantly
+    // Also send back to sender instantly
     if (senderSocketId) {
       io.to(senderSocketId).emit("receiveMessage", {
         senderId,
