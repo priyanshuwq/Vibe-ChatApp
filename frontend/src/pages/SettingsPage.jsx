@@ -9,7 +9,7 @@ const SettingsPage = () => {
   const [preview, setPreview] = useState(authUser?.profilePic);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Handle file change and convert to base64
+  //  Handle file change and convert to base64
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -30,7 +30,7 @@ const SettingsPage = () => {
     };
   };
 
-  // ✅ Upload base64 to backend
+  // Upload base64 to backend
   const handleUpload = async (base64Image) => {
     try {
       setLoading(true);
@@ -42,6 +42,7 @@ const SettingsPage = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen pt-24 px-4 flex justify-center">
@@ -89,9 +90,7 @@ const SettingsPage = () => {
               Change Photo
             </label>
 
-            {loading && (
-              <p className="text-xs text-gray-500">Uploading...</p>
-            )}
+            {loading && <p className="text-xs text-gray-500">Uploading...</p>}
           </div>
 
           {/* Info */}
@@ -129,7 +128,7 @@ const SettingsPage = () => {
           </div>
           <ThemeToggle />
         </motion.div>
-{/* Coffee Support Card */}
+        {/* Coffee Support Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
