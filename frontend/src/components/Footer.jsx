@@ -1,35 +1,23 @@
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Footer = () => {
+  const { authUser } = useAuthStore();
+
+  if (authUser) return null; // hide if logged in
+
   return (
     <motion.footer
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full sticky bottom-0 left-0 border-t border-base-300 bg-base-200/30 backdrop-blur-md text-center py-2 z-50"
+      className="w-full fixed bottom-0 left-0 border-t border-base-300 bg-base-200/30 backdrop-blur-sm text-center py-2 z-50"
     >
       <div className="text-sm">
-        Design & Developed by{" "}
-        <span className="font-bold">Priyanshu</span>
+        Design & Developed by <span className="font-bold">Priyanshu</span>
       </div>
-      <div className="flex justify-center gap-6 mt-1">
-        <a
-          href="https://github.com/priyanshuwq"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-primary transition"
-        >
-          <FaGithub size={18} />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/priyanshu-shekhar-singh/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-primary transition"
-        >
-          <FaLinkedin size={18} />
-        </a>
+      <div className="text-xs mt-1 opacity-70">
+        © {new Date().getFullYear()}. All rights reserved.
       </div>
     </motion.footer>
   );

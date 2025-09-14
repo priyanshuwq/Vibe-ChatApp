@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
-import { useThemeStore } from "../store/useThemeStore"; 
+import { useThemeStore } from "../store/useThemeStore";
 import MessageInput from "./MessageInput";
 import { motion } from "framer-motion";
 
@@ -62,7 +62,7 @@ const ChatContainer = () => {
     >
       {/* Chat Header */}
       <div
-        className={`px-5 py-3 flex items-center gap-3 border-b shadow-md transition-colors duration-300 ${
+        className={`px-3 sm:px-5 py-2 sm:py-3 flex items-center gap-2 sm:gap-3 border-b shadow-md transition-colors duration-300 ${
           theme === "dark"
             ? "bg-[#1f1f1f] border-gray-800"
             : "bg-white border-gray-200"
@@ -71,25 +71,27 @@ const ChatContainer = () => {
         <img
           src={selectedUser?.profilePic || "/avatar.png"}
           alt="User"
-          className="w-10 h-10 rounded-full object-cover border border-gray-500"
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-500"
         />
         <div>
           <h2
-            className={`font-semibold ${
+            className={`font-semibold text-sm sm:text-base ${
               theme === "dark" ? "text-white" : "text-gray-800"
             }`}
           >
             {selectedUser?.fullName}
           </h2>
-          {typingUser && <p className="text-sm text-green-400">Typing...</p>}
+          {typingUser && (
+            <p className="text-xs sm:text-sm text-green-400">Typing...</p>
+          )}
         </div>
       </div>
 
       {/* Messages Section */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+      <div className="flex-1 overflow-y-auto px-3 py-2 sm:px-5 sm:py-4 space-y-3 sm:space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
         {isMessagesLoading ? (
           <p
-            className={`text-center ${
+            className={`text-center text-sm sm:text-base ${
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -108,7 +110,7 @@ const ChatContainer = () => {
                 className={`flex ${isSender ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`relative max-w-[70%] px-4 py-2 rounded-2xl shadow-md transition-all duration-300 ${
+                  className={`relative max-w-[80%] sm:max-w-[70%] px-3 sm:px-4 py-2 rounded-2xl shadow-md transition-all duration-300 ${
                     isSender
                       ? "bg-blue-500 text-white rounded-br-none"
                       : theme === "dark"
@@ -118,7 +120,7 @@ const ChatContainer = () => {
                 >
                   {/* Message Text */}
                   {msg.text && (
-                    <p className="text-[15px] leading-relaxed break-words mb-1">
+                    <p className="text-sm sm:text-[15px] leading-relaxed break-words mb-1">
                       {msg.text}
                     </p>
                   )}
@@ -129,14 +131,14 @@ const ChatContainer = () => {
                       <img
                         src={msg.image}
                         alt="attachment"
-                        className="max-w-xs rounded-lg shadow-md border border-gray-600"
+                        className="w-full max-w-[180px] sm:max-w-xs rounded-lg shadow-md border border-gray-600 object-cover"
                       />
                     </div>
                   )}
 
                   {/* Timestamp */}
                   <span
-                    className={`block text-right mt-1 text-[11px] ${
+                    className={`block text-right mt-1 text-[10px] sm:text-[11px] ${
                       isSender
                         ? "text-white/70"
                         : theme === "dark"
@@ -147,6 +149,8 @@ const ChatContainer = () => {
                     {new Date(msg.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
+                      day: "2-digit",
+                      month: "2-digit",
                     })}
                   </span>
                 </div>
@@ -155,7 +159,7 @@ const ChatContainer = () => {
           })
         ) : (
           <p
-            className={`text-center ${
+            className={`text-center text-sm sm:text-base ${
               theme === "dark" ? "text-gray-400" : "text-gray-500"
             }`}
           >
@@ -167,7 +171,7 @@ const ChatContainer = () => {
 
       {/* Message Input */}
       <div
-        className={`border-t transition-colors duration-300 ${
+        className={`border-t transition-colors duration-300 px-3 sm:px-5 py-2 sm:py-3 ${
           theme === "dark"
             ? "border-gray-800 bg-[#1f1f1f]"
             : "border-gray-200 bg-white"
