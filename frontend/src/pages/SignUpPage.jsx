@@ -32,117 +32,122 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300 items-center justify-center px-4 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,28,135,0.15),transparent_60%)] pointer-events-none"></div>
+    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/wallpaper.jpg')" }}
+      ></div>
 
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 items-center gap-10 z-10">
-        {/* Left Section - Signup Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 sm:p-10 border border-gray-300 dark:border-gray-700 transition-colors duration-300"
-        >
-          <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-500 bg-clip-text text-transparent">
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-white/65 dark:bg-black/85"></div>
+
+      {/* Content */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 max-w-md w-full space-y-8"
+      >
+        <div className="text-center">
+          <h2 className="mb-3 text-indigo-600 dark:text-indigo-400 font-bold text-3xl">
             Create Account
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400 text-center">
+          </h2>
+          <p className="mt-2 text-sm text-base-content/70">
             Join Vibe Chat and start connecting!
           </p>
+        </div>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Jhon Doe"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@gmail.com"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-              />
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-              />
-            </div>
-
-            <motion.button
-              type="submit"
-              whileTap={{ scale: 0.97 }}
-              disabled={loading}
-              className="w-full py-3 text-lg font-semibold rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg text-white"
-            >
-              {loading ? "Creating Account..." : "Sign Up"}
-            </motion.button>
-          </form>
-
-          <p className="text-center text-gray-600 dark:text-gray-400 mt-5">
-            Already have an account?{" "}
-            <Link to="/login" className="text-purple-500 hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </motion.div>
-
-        {/* Right Section - Illustration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="hidden lg:flex items-center justify-center"
+        <motion.form
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          onSubmit={handleSubmit}
+          className="mt-8 space-y-6 bg-base-100/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-base-300/40"
         >
-          <motion.img
-            src="/chat-illustration.svg"
-            alt="Chat Illustration"
-            draggable="false"
-            className="max-w-md"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-      </div>
+          <div>
+            <label className="block text-sm font-medium text-base-content mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              autoComplete="name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="John Doe"
+              required
+              className="input input-bordered w-full bg-base-100/50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-base-content mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="example@gmail.com"
+              required
+              className="input input-bordered w-full bg-base-100/50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-base-content mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className="input input-bordered w-full bg-base-100/50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-base-content mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              autoComplete="current-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className="input input-bordered w-full bg-base-100/50"
+            />
+          </div>
+
+          <motion.button
+            type="submit"
+            disabled={loading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-indigo-700 border-none hover:from-indigo-700 hover:to-indigo-800"
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </motion.button>
+
+          <div className="text-center">
+            <span className="text-sm text-base-content/70">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline transition-colors"
+              >
+                Sign in
+              </Link>
+            </span>
+          </div>
+        </motion.form>
+      </motion.div>
     </div>
   );
 }
