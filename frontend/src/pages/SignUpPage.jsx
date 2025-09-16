@@ -2,12 +2,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignUpPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { signup } = useAuthStore();
@@ -63,7 +66,7 @@ export default function SignUpPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
           onSubmit={handleSubmit}
-          className="mt-8 space-y-6 bg-base-100/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-base-300/40"
+          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-base-300/40"
         >
           <div>
             <label className="block text-sm font-medium text-base-content mb-2">
@@ -76,7 +79,7 @@ export default function SignUpPage() {
               onChange={(e) => setFullName(e.target.value)}
               placeholder="John Doe"
               required
-              className="input input-bordered w-full bg-base-100/50"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
             />
           </div>
 
@@ -91,38 +94,54 @@ export default function SignUpPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@gmail.com"
               required
-              className="input input-bordered w-full bg-base-100/50"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
             />
           </div>
 
-          <div>
+          {/* Password */}
+          <div className="relative">
             <label className="block text-sm font-medium text-base-content mb-2">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-base-100/50"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-200"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
-          <div>
+          {/* Confirm Password */}
+          <div className="relative">
             <label className="block text-sm font-medium text-base-content mb-2">
               Confirm Password
             </label>
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               autoComplete="current-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-base-100/50"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-200"
+            >
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
           <motion.button
