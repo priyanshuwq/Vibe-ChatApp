@@ -45,15 +45,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+    //  Force dark theme for login only
+    <div
+      data-theme="dark"
+      className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden"
+    >
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/wallpaper.jpg')" }}
       ></div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-white/65 dark:bg-black/85"></div>
+      {/* Dark overlay (no light mode fallback) */}
+      <div className="absolute inset-0 bg-black/85"></div>
 
       {/* Content */}
       <motion.div
@@ -76,13 +80,13 @@ export default function LoginPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.8 }}
-              className="mb-5 text-indigo-600 dark:text-indigo-400 font-bold text-3xl drop-shadow-lg"
+              className="mb-5 font-bold text-3xl drop-shadow-lg text-indigo-400"
             >
               {texts[index]}
             </motion.h2>
           </AnimatePresence>
 
-          <p className="mt-4 text-sm text-base-content/70">
+          <p className="mt-4 text-sm text-gray-300">
             Sign in to your account and start chatting!
           </p>
         </div>
@@ -91,32 +95,32 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mt-8 space-y-6 bg-base-100/95 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-base-300/40"
+          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-700"
           onSubmit={handleSubmit}
         >
           <div>
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input input-bordered w-full bg-base-100/50"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
               placeholder="example@gmail.com"
               required
             />
           </div>
 
           <div className="relative">
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Password
             </label>
             <input
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered w-full pr-12 bg-base-100/50"
+              className="input input-bordered w-full pr-12 bg-gray-800 text-white border-gray-600"
               placeholder="••••••••"
               required
               autoComplete="current-password"
@@ -124,7 +128,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-base-content/60 hover:text-base-content"
+              className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-200"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -145,11 +149,11 @@ export default function LoginPage() {
           </motion.button>
 
           <div className="text-center">
-            <span className="text-sm text-base-content/70">
+            <span className="text-sm text-gray-400">
               Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline transition-colors"
+                className="text-indigo-400 font-medium hover:underline transition-colors"
               >
                 Create one
               </Link>
