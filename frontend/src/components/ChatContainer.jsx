@@ -3,7 +3,9 @@ import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { useThemeStore } from "../store/useThemeStore";
 import MessageInput from "./MessageInput";
+import { Paper, Avatar } from "@mui/material";
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
 
 const ChatContainer = () => {
   const { getMessages, messages, selectedUser, isMessagesLoading } =
@@ -146,12 +148,7 @@ const ChatContainer = () => {
                         : "text-gray-600"
                     }`}
                   >
-                    {new Date(msg.createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      day: "2-digit",
-                      month: "2-digit",
-                    })}
+                    {dayjs(msg.createdAt).format("MMM D, h:mm A")}
                   </span>
                 </div>
               </motion.div>
@@ -182,5 +179,33 @@ const ChatContainer = () => {
     </div>
   );
 };
+
+const Message = ({ message, isOwn }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className={`flex items-end mb-2 ${isOwn ? "justify-end" : "justify-start"}`}
+  >
+    {!isOwn && <Avatar src={message.avatar} />}
+    <Paper
+      elevation={3}
+      sx={{
+        bgcolor: isOwn ? "#1976d2" : "#222",
+        color: "#fff",
+        borderRadius: 3,
+        px: 2,
+        py: 1,
+        maxWidth: 320,
+        boxShadow: 3,
+      }}
+    >
+      <div>{message.text}</div>
+      <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
+        {dayjs(message.createdAt).format("MMM D, h:mm A")}
+      </div>
+    </Paper>
+  </motion.div>
+);
 
 export default ChatContainer;
