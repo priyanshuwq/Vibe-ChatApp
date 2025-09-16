@@ -14,7 +14,15 @@ const Footer = () => {
       className="w-full fixed bottom-0 left-0 border-t border-base-300 bg-base-200/30 backdrop-blur-sm text-center py-2 z-50"
     >
       <div className="text-sm">
-        Design & Developed by <span className="font-bold">Priyanshu</span>
+        Design & Developed by{" "}
+        <a
+          href="https://github.com/priyanshuwq"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold hover:underline"
+        >
+          Priyanshu
+        </a>
       </div>
       <div className="text-xs mt-1 opacity-70">
         © {new Date().getFullYear()}. All rights reserved.
