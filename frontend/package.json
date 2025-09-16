@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.2",
     "axios": "^1.11.0",
+    "dayjs": "^1.11.18",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.541.0",
