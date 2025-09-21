@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -14,6 +14,20 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
 
   const { signup } = useAuthStore();
+
+  // Force dark mode on mount, restore previous theme on unmount
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevTheme = html.getAttribute("data-theme");
+    html.setAttribute("data-theme", "dark");
+    return () => {
+      if (prevTheme && prevTheme !== "dark") {
+        html.setAttribute("data-theme", prevTheme);
+      } else {
+        html.removeAttribute("data-theme");
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,41 +49,49 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+    <div
+      data-theme="dark"
+      className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden"
+    >
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/wallpaper.jpg')" }}
       ></div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-white/65 dark:bg-black/85"></div>
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/90"></div>
 
       {/* Content */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8 }}
         className="relative z-10 max-w-md w-full space-y-8"
       >
         <div className="text-center">
-          <h2 className="mb-3 text-indigo-600 dark:text-indigo-400 font-bold text-3xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-5 font-bold text-3xl drop-shadow-lg text-indigo-400"
+          >
             Create Account
-          </h2>
-          <p className="mt-2 text-sm text-base-content/70">
+          </motion.h2>
+          <p className="mt-4 text-sm text-gray-300">
             Join Vibe Chat and start connecting!
           </p>
         </div>
 
         <motion.form
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           onSubmit={handleSubmit}
-          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-base-300/40"
+          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-700"
         >
           <div>
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Full Name
             </label>
             <input
@@ -84,7 +106,7 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
             </label>
             <input
@@ -100,7 +122,7 @@ export default function SignUpPage() {
 
           {/* Password */}
           <div className="relative">
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Password
             </label>
             <input
@@ -110,7 +132,7 @@ export default function SignUpPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600 pr-12"
             />
             <button
               type="button"
@@ -123,17 +145,17 @@ export default function SignUpPage() {
 
           {/* Confirm Password */}
           <div className="relative">
-            <label className="block text-sm font-medium text-base-content mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Confirm Password
             </label>
             <input
               type={showConfirmPassword ? "text" : "password"}
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
+              className="input input-bordered w-full bg-gray-800 text-white border-gray-600 pr-12"
             />
             <button
               type="button"
@@ -151,15 +173,19 @@ export default function SignUpPage() {
             whileTap={{ scale: 0.98 }}
             className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-indigo-700 border-none hover:from-indigo-700 hover:to-indigo-800"
           >
-            {loading ? "Creating Account..." : "Sign Up"}
+            {loading ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              "Sign Up"
+            )}
           </motion.button>
 
           <div className="text-center">
-            <span className="text-sm text-base-content/70">
+            <span className="text-sm text-gray-400">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline transition-colors"
+                className="text-indigo-400 font-medium hover:underline transition-colors"
               >
                 Sign in
               </Link>
