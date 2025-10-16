@@ -1,3 +1,11 @@
+/* Floating animation for admin badge */
+.animate-float {
+	animation: floatBadge 2s ease-in-out infinite alternate;
+}
+@keyframes floatBadge {
+	0% { transform: translateY(0) scale(1); }
+	100% { transform: translateY(-6px) scale(1.05); }
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
