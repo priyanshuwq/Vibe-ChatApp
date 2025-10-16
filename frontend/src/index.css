@@ -1,3 +1,40 @@
+/* Continuous shining animation for admin badge */
+.admin-badge-shine {
+	position: relative;
+	overflow: hidden;
+}
+.admin-badge-shine::after {
+	content: '';
+	position: absolute;
+	top: 0; left: -40%;
+	width: 60%; height: 100%;
+	background: linear-gradient(120deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+	transform: skewX(-20deg);
+	animation: shineBadge 1.5s infinite linear;
+	pointer-events: none;
+}
+@keyframes shineBadge {
+	0% { left: -40%; }
+	100% { left: 100%; }
+}
+/* Shining animation for admin badge */
+.animate-shine {
+	position: relative;
+	overflow: hidden;
+}
+.animate-shine::after {
+	content: '';
+	position: absolute;
+	top: 0; left: -40%;
+	width: 60%; height: 100%;
+	background: linear-gradient(120deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 100%);
+	transform: skewX(-20deg);
+	animation: shineBadge 2.5s infinite linear;
+}
+@keyframes shineBadge {
+	0% { left: -40%; }
+	100% { left: 100%; }
+}
 /* Floating animation for admin badge */
 .animate-float {
 	animation: floatBadge 2s ease-in-out infinite alternate;
