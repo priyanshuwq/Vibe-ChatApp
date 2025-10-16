@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Users } from "lucide-react";
+import { Users, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
-    useChatStore();
+// Props: isOpen (mobile), onToggle(): void
+const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
+  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
   useEffect(() => {
@@ -17,13 +17,33 @@ const Sidebar = () => {
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-300 bg-base-100 shadow-lg">
+    <aside
+      className={`
+        fixed sm:static inset-y-0 left-0 z-40 
+        w-64 sm:w-72 
+        flex flex-col bg-base-100 shadow-lg
+        sm:border-r sm:border-base-300 sm:rounded-none
+        rounded-r-2xl
+        transform transition-transform duration-300
+        ${isOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
+      `}
+    >
       {/* Sidebar Header */}
-      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3">
-        <Users className="size-6 text-primary" />
-        <span className="font-semibold hidden lg:block text-base-content text-lg">
-          Contacts
-        </span>
+      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-2xl sm:rounded-tr-none">
+        <div className="flex items-center gap-3">
+          <Users className="size-6 text-primary" />
+          <span className="font-semibold hidden lg:block text-base-content text-lg">
+            Contacts
+          </span>
+        </div>
+        {/* Close Button (mobile only) */}
+        <button
+          className="sm:hidden block p-1 rounded-full hover:bg-base-200 transition"
+          aria-label="Close contacts"
+          onClick={onToggle}
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Contact List */}
@@ -64,10 +84,19 @@ const Sidebar = () => {
                   </div>
 
                   {/* User Info */}
-                  <div className="hidden lg:flex flex-col text-left min-w-0">
-                    <span className="font-medium text-base-content truncate text-sm">
-                      {user.fullName}
-                    </span>
+                  <div className="flex flex-col text-left min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-medium text-base-content truncate text-sm">
+                        {user.fullName}
+                      </span>
+                      {user.isAdmin && (
+                        <span className="flex items-center ml-1" title="Admin">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-yellow-400 drop-shadow">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+                          </svg>
+                        </span>
+                      )}
+                    </div>
                     <span
                       className={`text-xs truncate ${
                         isOnline ? "text-green-500" : "text-zinc-400"
