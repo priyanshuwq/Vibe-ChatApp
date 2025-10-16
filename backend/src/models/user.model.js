@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profilePic: { type: String, default: "" }, // ✅ camelCase only
+    isAdmin: { type: Boolean, default: false }, // Admin flag
   },
   { timestamps: true }
 );

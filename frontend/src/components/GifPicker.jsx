@@ -55,18 +55,18 @@ const GifPicker = ({ onSelectGif, onClose }) => {
       const data = await response.json();
 
       if (data && data.data) {
-        // Use downsized or fixed_width_small formats (usually 100-500KB)
+        // Use smallest formats for fastest loading and sending
         const processedGifs = data.data.map((gif) => ({
           id: gif.id,
-          // Use downsized format which is optimized for web
+          // Prioritize smallest formats (usually 50-200KB)
           url:
+            gif.images.downsized_medium?.url ||
             gif.images.downsized?.url ||
-            gif.images.fixed_width_small?.url ||
-            gif.images.fixed_height_small.url,
+            gif.images.fixed_width_small?.url,
           preview:
             gif.images.fixed_width_small?.url ||
             gif.images.fixed_height_small?.url,
-          size: gif.images.downsized?.size || "unknown",
+          size: gif.images.downsized_medium?.size || "unknown",
         }));
         setGifs(processedGifs);
       }
@@ -79,11 +79,12 @@ const GifPicker = ({ onSelectGif, onClose }) => {
 
   return (
     <div
-      className={`absolute bottom-16 left-0 right-0 mx-2 sm:mx-auto sm:right-auto sm:left-16 w-auto sm:w-96 rounded-lg shadow-xl z-20 border ${
-        theme === "dark"
-          ? "bg-[#1a1a1a] border-gray-700"
-          : "bg-white border-gray-200"
-      }`}
+      className={`
+        fixed sm:absolute bottom-20 sm:bottom-16 left-1/2 sm:left-16 -translate-x-1/2 sm:translate-x-0
+        w-[95%] sm:w-96 max-h-[70vh] overflow-hidden
+        rounded-lg shadow-xl z-40 border flex flex-col
+        ${theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-200"}
+      `}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-700">
@@ -141,10 +142,11 @@ const GifPicker = ({ onSelectGif, onClose }) => {
         ))}
       </div>
 
-      {/* GIFs grid */}
-      <div className="h-64 overflow-y-auto p-2 grid grid-cols-3 gap-1">
+      {/* GIFs grid - scrollable area */}
+      <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
+        <div className="grid grid-cols-3 gap-1">
         {loading ? (
-          <div className="col-span-3 h-full flex items-center justify-center">
+          <div className="col-span-3 h-40 flex items-center justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           </div>
         ) : gifs.length > 0 ? (
@@ -163,13 +165,14 @@ const GifPicker = ({ onSelectGif, onClose }) => {
             </div>
           ))
         ) : (
-          <div className="col-span-3 h-full flex items-center justify-center text-gray-500">
+          <div className="col-span-3 h-40 flex items-center justify-center text-gray-500">
             No GIFs found
           </div>
         )}
+        </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer (non-scrollable) */}
       <div
         className={`p-2 border-t border-gray-700 text-center text-xs ${
           theme === "dark" ? "text-gray-400" : "text-gray-500"

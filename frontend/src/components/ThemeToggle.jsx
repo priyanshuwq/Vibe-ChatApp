@@ -2,46 +2,52 @@ import { motion } from "framer-motion";
 import { useThemeStore } from "../store/useThemeStore";
 import { Moon, Sun } from "lucide-react";
 
+// Touch button theme toggle with smooth animation
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useThemeStore();
   const isDark = theme === "dark";
 
   return (
     <motion.button
+      type="button"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-pressed={isDark}
       onClick={toggleTheme}
+      whileTap={{ scale: 0.92 }}
       initial={false}
-      animate={{ backgroundColor: isDark ? "#1f2937" : "#f3f4f6" }}
-      transition={{ duration: 0.3 }}
-      className="flex items-center justify-between w-16 h-8 rounded-full px-1 shadow-md border border-base-300 relative"
+      animate={{
+        backgroundColor: isDark ? "#111827" : "#F3F4F6",
+        borderColor: isDark ? "#374151" : "#E5E7EB",
+      }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="relative inline-flex items-center justify-center w-10 h-10 sm:w-9 sm:h-9 rounded-full border shadow-md overflow-hidden"
     >
-      {/* Sliding Knob */}
-      <motion.div
-        className="absolute w-6 h-6 bg-white rounded-full shadow-md"
-        layout
-        transition={{
-          type: "spring",
-          stiffness: 700,
-          damping: 30,
+      {/* Soft glow */}
+      <motion.span
+        className="absolute inset-0 pointer-events-none rounded-full"
+        animate={{
+          boxShadow: isDark
+            ? "0 0 24px rgba(59,130,246,0.35) inset, 0 0 10px rgba(59,130,246,0.25)"
+            : "0 0 24px rgba(251,191,36,0.35) inset, 0 0 10px rgba(251,191,36,0.25)",
+          opacity: 0.65,
         }}
-        style={{
-          left: isDark ? "36px" : "2px",
-        }}
+        transition={{ duration: 0.4 }}
       />
 
-      {/* Icons */}
+      {/* Icon with smooth rotate/crossfade */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isDark ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
+        key={isDark ? "moon" : "sun"}
+        initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+        animate={{ rotate: 0, opacity: 1, scale: 1 }}
+        exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+        transition={{ type: "spring", stiffness: 300, damping: 18 }}
+        className="flex items-center justify-center"
       >
-        <Moon className="size-4 text-yellow-400" />
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isDark ? 0 : 1 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Sun className="size-4 text-yellow-500" />
+        {isDark ? (
+          <Moon className="w-5 h-5 text-blue-400" />
+        ) : (
+          <Sun className="w-5 h-5 text-yellow-500" />
+        )}
       </motion.div>
     </motion.button>
   );

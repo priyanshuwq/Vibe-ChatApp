@@ -167,7 +167,17 @@ const SettingsPage = () => {
 
           {/* Info */}
           <div className="flex-1 text-center sm:text-left space-y-2">
-            <h3 className="text-lg font-semibold">{authUser?.fullName}</h3>
+            <div className="flex items-center justify-center sm:justify-start gap-2">
+              <h3 className="text-lg font-semibold">{authUser?.fullName}</h3>
+              {authUser?.isAdmin && (
+                <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-semibold bg-black text-yellow-400 border border-yellow-400 rounded-full shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-yellow-400">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+                  </svg>
+                  Admin
+                </span>
+              )}
+            </div>
             <p className="text-sm text-gray-500">{authUser?.email}</p>
 
             <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
@@ -302,16 +312,17 @@ const SettingsPage = () => {
                     <div className="rounded-xl overflow-hidden">
                       {/* The GitHub contribution graph embedded in an iframe with proper styling */}
                       <div className="relative w-full rounded-xl overflow-hidden">
-                        {/* Mobile optimized view */}
+                        {/* Mobile optimized view - show full commit history with horizontal scroll */}
                         <div className="block sm:hidden">
                           <div className="overflow-x-auto pb-3 -mx-2 px-2">
-                            <div className="min-w-[500px]">
-                              <div className="aspect-[3/1] w-full rounded-xl overflow-hidden">
+                            <div className="min-w-[900px]">
+                              <div className="aspect-[5/1] w-full rounded-xl overflow-hidden">
                                 <iframe
                                   src={`https://ghchart.rshah.org/${theme === "dark" ? "" : "fff"}/${githubData.login}`}
                                   style={{
                                     width: "100%",
                                     height: "100%",
+                                    minWidth: "900px",
                                     borderRadius: "12px",
                                     backgroundColor:
                                       theme === "dark"

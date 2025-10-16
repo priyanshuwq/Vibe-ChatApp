@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { ImageOff } from "lucide-react";
 
-const ChatContainer = () => {
+const ChatContainer = ({ onOpenSidebar = () => {} }) => {
   const { getMessages, messages, selectedUser, isMessagesLoading } =
     useChatStore();
 
@@ -80,6 +80,14 @@ const ChatContainer = () => {
             : "bg-white border-gray-200"
         }`}
       >
+        {/* Mobile menu button - left, does not overlap avatar */}
+        <button
+          className="sm:hidden inline-flex items-center justify-center p-2 rounded-full border border-gray-300 bg-white text-gray-700 shadow"
+          onClick={onOpenSidebar}
+          aria-label="Open contacts"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+        </button>
         <img
           src={selectedUser?.profilePic || "/avatar.png"}
           alt="User"

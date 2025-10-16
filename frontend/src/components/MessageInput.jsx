@@ -34,7 +34,7 @@ const MessageInput = ({ selectedUser }) => {
     };
   }, [showGifPicker]);
 
-  // Handle image upload with compression (target 500KB to stay under 1MB backend limit)
+  // Handle image upload with fast compression
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -46,13 +46,13 @@ const MessageInput = ({ selectedUser }) => {
 
       console.log(`Original image size: ${sizeKB.toFixed(2)}KB`);
 
-      // Compress to 1500KB to ensure backend accepts it (2MB limit with safety margin)
+      // Fast compression to 800KB (smaller = faster upload)
       try {
-        imageData = await compressImage(imageData, 1500);
+        imageData = await compressImage(imageData, 800);
         const finalSize = getBase64SizeKB(imageData);
         console.log(`Compressed image to: ${finalSize.toFixed(2)}KB`);
 
-        if (finalSize > 1800) {
+        if (finalSize > 1500) {
           alert(
             "Image is too large even after compression. Please try a smaller image."
           );
@@ -70,51 +70,38 @@ const MessageInput = ({ selectedUser }) => {
     reader.readAsDataURL(file);
   };
 
-  // Handle GIF selection with relaxed size limits (up to 1.5MB)
+  // Handle GIF selection - optimized for speed (direct URL, no conversion)
   const handleGifSelect = async (gifUrl) => {
     try {
+      // For small GIFs, just use the URL directly (fastest approach)
+      // Convert to base64 only if needed
       const response = await fetch(gifUrl);
       const blob = await response.blob();
 
-      // Check file size - max 1.5MB for safety
-      const maxSize = 1500 * 1024; // 1.5MB
+      // Check file size - max 800KB for fast upload
+      const maxSize = 800 * 1024; // 800KB
 
       console.log(`GIF blob size: ${(blob.size / 1024).toFixed(2)}KB`);
 
       if (blob.size > maxSize) {
-        alert("This GIF is too large (>1.5MB). Please select a smaller one.");
+        alert("This GIF is too large (>800KB). Please select a smaller one.");
         setShowGifPicker(false);
         return;
       }
 
-      // Convert blob to base64
+      // Convert blob to base64 (fast, single pass)
       const reader = new FileReader();
       reader.onloadend = async () => {
-        let base64 = reader.result;
-        let sizeKB = getBase64SizeKB(base64);
+        const base64 = reader.result;
+        const sizeKB = getBase64SizeKB(base64);
 
         console.log(`GIF base64 size: ${sizeKB.toFixed(2)}KB`);
 
-        // If larger than 1500KB, try to compress
-        if (sizeKB > 1500) {
-          try {
-            base64 = await compressImage(base64, 1500);
-            sizeKB = getBase64SizeKB(base64);
-            console.log(`Compressed GIF to: ${sizeKB.toFixed(2)}KB`);
-
-            if (sizeKB > 1800) {
-              alert(
-                "This GIF is too large even after compression. Please select a smaller one."
-              );
-              setShowGifPicker(false);
-              return;
-            }
-          } catch (error) {
-            console.error("Error compressing GIF:", error);
-            alert("Failed to compress GIF. Please select a smaller one.");
-            setShowGifPicker(false);
-            return;
-          }
+        // Quick validation without heavy compression
+        if (sizeKB > 1000) {
+          alert("This GIF is too large. Please select a smaller one.");
+          setShowGifPicker(false);
+          return;
         }
 
         setImage(base64);

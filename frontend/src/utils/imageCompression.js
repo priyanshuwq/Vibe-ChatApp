@@ -1,10 +1,10 @@
 /**
- * Compress an image/GIF to reduce file size
+ * Compress an image/GIF to reduce file size (optimized for speed)
  * @param {string} base64 - Base64 encoded image
- * @param {number} maxSizeKB - Maximum size in KB (default 1500KB to stay under 2MB limit)
+ * @param {number} maxSizeKB - Maximum size in KB (default 800KB for faster uploads)
  * @returns {Promise<string>} - Compressed base64 image
  */
-export const compressImage = async (base64, maxSizeKB = 1500) => {
+export const compressImage = async (base64, maxSizeKB = 800) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
 
@@ -12,11 +12,11 @@ export const compressImage = async (base64, maxSizeKB = 1500) => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
-      // Calculate new dimensions - reasonable size for chat
+      // Calculate new dimensions - optimized for chat (smaller = faster)
       let width = img.width;
       let height = img.height;
-      const maxWidth = 800; // Increased from 200
-      const maxHeight = 800;
+      const maxWidth = 600; // Reduced from 800 for faster processing
+      const maxHeight = 600;
 
       // Scale down proportionally
       if (width > maxWidth || height > maxHeight) {
@@ -28,28 +28,12 @@ export const compressImage = async (base64, maxSizeKB = 1500) => {
       canvas.width = width;
       canvas.height = height;
 
-      // Draw and compress
+      // Draw and compress in one pass (faster)
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Start with reasonable compression
-      let quality = 0.7;
-      let compressed = canvas.toDataURL("image/jpeg", quality);
-
-      // Reduce quality if needed to stay under limit
-      while (getBase64SizeKB(compressed) > maxSizeKB && quality > 0.1) {
-        quality -= 0.1;
-        compressed = canvas.toDataURL("image/jpeg", quality);
-      }
-
-      // If still too large, reduce dimensions
-      if (getBase64SizeKB(compressed) > maxSizeKB && width > 400) {
-        width = Math.floor(width * 0.8);
-        height = Math.floor(height * 0.8);
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, 0, 0, width, height);
-        compressed = canvas.toDataURL("image/jpeg", 0.6);
-      }
+      // Single compression pass with optimized quality
+      const quality = 0.75; // Good balance of quality and size
+      const compressed = canvas.toDataURL("image/jpeg", quality);
 
       resolve(compressed);
     };

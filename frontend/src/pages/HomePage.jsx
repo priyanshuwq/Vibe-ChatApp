@@ -5,22 +5,43 @@ import NoChatSelected from "../components/NoChatSelected";
 import { useAuthStore } from "../store/useAuthStore";
 import { motion } from "framer-motion";
 import { MessageSquare } from "lucide-react";
+import { useState } from "react";
 
 const HomePage = () => {
   const { selectedUser } = useChatStore();
   const { authUser } = useAuthStore();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="h-screen bg-base-200 transition-colors duration-300">
       <div className="flex items-center justify-center pt-20 px-4">
         <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-[calc(100vh-8rem)] overflow-hidden">
-          <div className="flex h-full">
+          <div className="flex h-full relative">
+            {/* Dark overlay when sidebar is open on mobile */}
+            {isSidebarOpen && (
+              <div
+                className="sm:hidden fixed inset-0 z-30 bg-black/40"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+            )}
+
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(false)} />
 
             {/* Main Section */}
             {!selectedUser ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-8 bg-base-100 transition-all duration-300">
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-8 bg-base-100 transition-all duration-300 relative">
+                {/* Mobile menu button for no-chat section */}
+                <button
+                  className="sm:hidden absolute left-3 top-3 p-2 rounded-full bg-base-200 hover:bg-base-300 border border-base-300 shadow"
+                  onClick={() => setIsSidebarOpen(true)}
+                  aria-label="Open contacts"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                </button>
+
                 {/* Welcome Animation */}
                 <motion.div
                   initial={{ opacity: 0, y: -15 }}
@@ -86,7 +107,7 @@ const HomePage = () => {
                 </motion.p>
               </div>
             ) : (
-              <ChatContainer />
+              <ChatContainer onOpenSidebar={() => setIsSidebarOpen(true)} />
             )}
           </div>
         </div>
