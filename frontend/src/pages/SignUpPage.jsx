@@ -74,7 +74,7 @@ export default function SignUpPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-5 font-bold text-3xl drop-shadow-lg text-indigo-400"
+            className="mb-5 font-bold text-3xl drop-shadow-lg text-gray-200"
           >
             Create Account
           </motion.h2>
@@ -171,7 +171,7 @@ export default function SignUpPage() {
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-indigo-700 border-none hover:from-indigo-700 hover:to-indigo-800"
+            className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 border-none hover:from-gray-800 hover:to-gray-900"
           >
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
@@ -185,7 +185,7 @@ export default function SignUpPage() {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-indigo-400 font-medium hover:underline transition-colors"
+                className="text-gray-300 font-medium hover:underline transition-colors"
               >
                 Sign in
               </Link>

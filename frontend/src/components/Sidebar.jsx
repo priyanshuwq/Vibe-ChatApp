@@ -29,7 +29,7 @@ const Sidebar = () => {
       {/* Contact List */}
       <div className="overflow-y-auto w-full py-3 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-base-200">
         <AnimatePresence>
-          {users.length > 0 ? (
+          {users && users.length > 0 ? (
             users.map((user) => {
               const isOnline = onlineUsers.includes(user._id);
               return (
@@ -53,6 +53,10 @@ const Sidebar = () => {
                       src={user.profilePic || "/avatar.png"}
                       alt={user.fullName}
                       className="size-12 object-cover rounded-full border border-base-300"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/avatar.png";
+                      }}
                     />
                     {isOnline && (
                       <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-base-100 animate-ping"></span>

@@ -1,34 +1,40 @@
-<!-- Banner / Header Section -->
-<h1 align="center">🚀 Vibe Chat — Real-Time Conversations Made Simple</h1>
+# Vibe Chat Application
 
-<p align="center">
-  <b>A modern, fast, and secure chat platform built with the MERN stack</b>
-</p>
+A real-time chat application built with the MERN stack featuring auto-deleting messages, GIF support, and a modern dark theme UI.
 
----
+## Features
 
-📌 Overview  
-**Vibe Chat** is a **real-time chat application** designed for smooth, secure, and modern communication.  
-With **real-time messaging**, **dark & light modes**, and **media sharing**, it's built for a **seamless experience** on all devices.
+- 🔐 User authentication (Login/Signup)
+- 💬 Real-time messaging with Socket.io
+- 🖼️ Image and GIF sharing (compressed for optimal performance)
+- 🎨 Dark/Light theme toggle
+- ⏰ Auto-delete messages after 48 hours
+- 👥 Online user status
+- 📱 Fully responsive design
+- 🔔 Typing indicators
+- ☁️ Cloudinary integration for media storage
 
----
+## Tech Stack
 
-✨ Features
-- 💬 **Real-time Messaging** — Powered by **Socket.IO**  
-- 🔐 **Secure Authentication** — Using **JWT & bcrypt**  
-- 🌓 **Dark / Light Mode** — Smooth theme switching  
-- 📷 **Media Sharing** — Send images and files easily  
-- ⚡ **Blazing Fast** — Optimized for performance  
-- 📱 **Responsive Design** — Perfect on mobile & desktop
+### Frontend
+- React.js
+- Tailwind CSS + DaisyUI
+- Zustand (State Management)
+- Socket.io-client
+- Framer Motion
+- Axios
+- Lucide React (Icons)
 
----
+### Backend
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- Socket.io
+- Cloudinary
+- JWT Authentication
+- Node-cron (Auto cleanup)
 
-🛠 Tech Stack
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=react,nodejs,express,mongodb,tailwind,js,html,css,vite,git,github" alt="Tech Stack" />
-</p>
-
----
+## Project Structure
 
 
 

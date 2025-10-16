@@ -14,9 +14,25 @@ export const useChatStore = create((set, get) => ({
     set({ isUsersLoading: true });
     try {
       const res = await axiosInstance.get("/messages/users");
-      set({ users: res.data });
+
+      // Handle different response formats
+      let usersList = res.data;
+
+      // Check if response has a 'users' property
+      if (res.data && res.data.users && Array.isArray(res.data.users)) {
+        usersList = res.data.users;
+      }
+      // If data is not an array, log and set empty array
+      else if (!Array.isArray(usersList)) {
+        console.warn("Unexpected users response format:", res.data);
+        usersList = [];
+      }
+
+      set({ users: usersList });
     } catch (error) {
+      console.error("Get users error:", error);
       toast.error(error.response?.data?.message || "Failed to load users");
+      set({ users: [] });
     } finally {
       set({ isUsersLoading: false });
     }
@@ -28,23 +44,22 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
+      console.error("Get messages error:", error);
       toast.error(error.response?.data?.message || "Failed to load messages");
+      set({ messages: [] });
     } finally {
       set({ isMessagesLoading: false });
     }
   },
 
-  sendMessage: async (receiverId, text, image) => {
+  sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get();
     try {
       const res = await axiosInstance.post(
-        `/messages/send/${receiverId}`,
-        { text, image }, // backend expects JSON with text + base64 image
-        { headers: { "Content-Type": "application/json" } }
+        `/messages/send/${selectedUser._id}`,
+        messageData
       );
-
-      set((state) => ({
-        messages: [...state.messages, res.data],
-      }));
+      set({ messages: [...messages, res.data] });
     } catch (error) {
       console.error("Send message error:", error);
       toast.error(error.response?.data?.message || "Failed to send message");

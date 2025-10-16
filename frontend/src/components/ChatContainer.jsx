@@ -6,6 +6,7 @@ import MessageInput from "./MessageInput";
 import { Paper, Avatar } from "@mui/material";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
+import { ImageOff } from "lucide-react";
 
 const ChatContainer = () => {
   const { getMessages, messages, selectedUser, isMessagesLoading } =
@@ -14,6 +15,7 @@ const ChatContainer = () => {
   const { socket, authUser } = useAuthStore();
   const { theme } = useThemeStore();
   const [typingUser, setTypingUser] = useState(null);
+  const [failedImages, setFailedImages] = useState({});
   const messagesEndRef = useRef(null);
 
   // Fetch messages when selected user changes
@@ -56,6 +58,14 @@ const ChatContainer = () => {
     };
   }, [socket, selectedUser]);
 
+  // Handle image error
+  const handleImageError = (imageUrl) => {
+    setFailedImages((prev) => ({
+      ...prev,
+      [imageUrl]: true,
+    }));
+  };
+
   return (
     <div
       className={`flex flex-col h-full w-full transition-colors duration-300 ${
@@ -74,6 +84,10 @@ const ChatContainer = () => {
           src={selectedUser?.profilePic || "/avatar.png"}
           alt="User"
           className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-500"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/avatar.png";
+          }}
         />
         <div>
           <h2
@@ -130,11 +144,21 @@ const ChatContainer = () => {
                   {/* Image Message */}
                   {msg.image && (
                     <div className="mt-2">
-                      <img
-                        src={msg.image}
-                        alt="attachment"
-                        className="w-full max-w-[180px] sm:max-w-xs rounded-lg shadow-md border border-gray-600 object-cover"
-                      />
+                      {failedImages[msg.image] ? (
+                        <div className="w-full max-w-[180px] sm:max-w-xs rounded-lg bg-gray-800 border border-gray-600 p-4 flex flex-col items-center justify-center">
+                          <ImageOff className="w-8 h-8 text-gray-400 mb-2" />
+                          <p className="text-xs text-gray-400">
+                            Image unavailable
+                          </p>
+                        </div>
+                      ) : (
+                        <img
+                          src={msg.image}
+                          alt="attachment"
+                          className="w-full max-w-[180px] sm:max-w-xs rounded-lg shadow-md border border-gray-600 object-cover"
+                          onError={() => handleImageError(msg.image)}
+                        />
+                      )}
                     </div>
                   )}
 

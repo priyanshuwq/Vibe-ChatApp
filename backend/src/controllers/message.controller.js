@@ -1,9 +1,7 @@
-import User from "../models/user.model.js";
-import Message from "../models/message.model.js";
-
 import cloudinary from "../lib/cloudinary.js";
 import { getReceiverSocketId, io } from "../lib/socket.js";
-
+import Message from "../models/message.model.js";
+import User from "../models/user.model.js";
 
 // Clear all chat messages between two users
 export const clearChat = async (req, res) => {
@@ -25,7 +23,6 @@ export const clearChat = async (req, res) => {
     res.status(500).json({ message: "Failed to clear chat ❌" });
   }
 };
-
 
 export const getUsersForSidebar = async (req, res) => {
   try {
@@ -66,10 +63,36 @@ export const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
+    // Validate file size if image is present
+    if (image) {
+      // Calculate approximate size from base64 string
+      const base64Length = image.length;
+      const sizeInBytes = (base64Length * 3) / 4;
+      const sizeInKB = sizeInBytes / 1024;
+
+      // Reject if larger than 1MB (1024KB)
+      if (sizeInKB > 1024) {
+        return res.status(413).json({
+          error: "File too large",
+          message: "Image must be less than 1MB",
+          size: `${sizeInKB.toFixed(2)}KB`,
+        });
+      }
+    }
+
     let imageUrl;
     if (image) {
-      // Upload base64 image to cloudinary
-      const uploadResponse = await cloudinary.uploader.upload(image);
+      // Upload base64 image to cloudinary with optimizations
+      const uploadResponse = await cloudinary.uploader.upload(image, {
+        resource_type: "auto",
+        folder: "chat-images",
+        transformation: [
+          {
+            quality: "auto:low",
+            fetch_format: "auto",
+          },
+        ],
+      });
       imageUrl = uploadResponse.secure_url;
     }
 

@@ -9,6 +9,7 @@ const io = new Server(server, {
   cors: {
     origin: ["http://localhost:5173"], // ✅ Change this to your client URL in prod
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 

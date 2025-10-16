@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useThemeStore } from "../store/useThemeStore";
 import { Image, Send, X } from "lucide-react";
+import GifPicker from "./GifPicker";
+import { compressImage, getBase64SizeKB } from "../utils/imageCompression";
 
 const MessageInput = ({ selectedUser }) => {
   const { sendMessage } = useChatStore();
@@ -10,17 +12,127 @@ const MessageInput = ({ selectedUser }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [showGifPicker, setShowGifPicker] = useState(false);
+  const gifButtonRef = useRef(null);
 
-  // Handle image upload
-  const handleImageUpload = (e) => {
+  // Close gif picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showGifPicker &&
+        gifButtonRef.current &&
+        !gifButtonRef.current.contains(event.target) &&
+        !event.target.closest(".gif-picker-container")
+      ) {
+        setShowGifPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showGifPicker]);
+
+  // Handle image upload with compression (target 500KB to stay under 1MB backend limit)
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      let imageData = reader.result;
+      const sizeKB = getBase64SizeKB(imageData);
+
+      console.log(`Original image size: ${sizeKB.toFixed(2)}KB`);
+
+      // Compress to 500KB to ensure backend accepts it (1MB limit with safety margin)
+      try {
+        imageData = await compressImage(imageData, 500);
+        const finalSize = getBase64SizeKB(imageData);
+        console.log(`Compressed image to: ${finalSize.toFixed(2)}KB`);
+
+        if (finalSize > 900) {
+          alert(
+            "Image is too large even after compression. Please try a smaller image."
+          );
+          return;
+        }
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert("Failed to compress image. Please try a smaller file.");
+        return;
+      }
+
+      setImage(imageData);
+      setPreview(imageData);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle GIF selection with relaxed size limits (up to 500KB)
+  const handleGifSelect = async (gifUrl) => {
+    try {
+      const response = await fetch(gifUrl);
+      const blob = await response.blob();
+
+      // Check file size - max 500KB for safety
+      const maxSize = 500 * 1024; // 500KB
+
+      console.log(`GIF blob size: ${(blob.size / 1024).toFixed(2)}KB`);
+
+      if (blob.size > maxSize) {
+        alert("This GIF is too large (>500KB). Please select a smaller one.");
+        setShowGifPicker(false);
+        return;
+      }
+
+      // Convert blob to base64
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // base64 string
-        setPreview(reader.result); // still show preview
+      reader.onloadend = async () => {
+        let base64 = reader.result;
+        let sizeKB = getBase64SizeKB(base64);
+
+        console.log(`GIF base64 size: ${sizeKB.toFixed(2)}KB`);
+
+        // If larger than 500KB, try to compress
+        if (sizeKB > 500) {
+          try {
+            base64 = await compressImage(base64, 500);
+            sizeKB = getBase64SizeKB(base64);
+            console.log(`Compressed GIF to: ${sizeKB.toFixed(2)}KB`);
+
+            if (sizeKB > 900) {
+              alert(
+                "This GIF is too large even after compression. Please select a smaller one."
+              );
+              setShowGifPicker(false);
+              return;
+            }
+          } catch (error) {
+            console.error("Error compressing GIF:", error);
+            alert("Failed to compress GIF. Please select a smaller one.");
+            setShowGifPicker(false);
+            return;
+          }
+        }
+
+        setImage(base64);
+        setPreview(base64);
+        setShowGifPicker(false);
       };
-      reader.readAsDataURL(file);
+
+      reader.onerror = () => {
+        console.error("Error reading GIF");
+        alert("Failed to load GIF. Please try another one.");
+        setShowGifPicker(false);
+      };
+
+      reader.readAsDataURL(blob);
+    } catch (err) {
+      console.error("Error loading GIF:", err);
+      alert("Failed to load GIF. Please try another one.");
+      setShowGifPicker(false);
     }
   };
 
@@ -29,23 +141,27 @@ const MessageInput = ({ selectedUser }) => {
     if (e) e.preventDefault();
     if (!text.trim() && !image) return;
 
-    await sendMessage(selectedUser._id, text, image);
-    setText("");
-    setImage(null);
-    setPreview(null);
+    try {
+      await sendMessage({ text: text.trim(), image });
+      setText("");
+      setImage(null);
+      setPreview(null);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
   };
 
   // Handle Enter key press
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // prevent newline
+      e.preventDefault();
       handleSend();
     }
   };
 
   return (
     <div
-      className={`flex flex-col gap-2 p-2 sm:p-3 border-t transition-colors duration-300 ${
+      className={`flex flex-col gap-2 p-2 sm:p-3 transition-colors duration-300 ${
         theme === "dark"
           ? "bg-[#1f1f1f] border-gray-700"
           : "bg-white border-gray-300"
@@ -72,7 +188,7 @@ const MessageInput = ({ selectedUser }) => {
       )}
 
       {/* Input Row */}
-      <div className="flex items-center">
+      <div className="flex items-center relative">
         {/* Upload Image Button */}
         <label
           htmlFor="chat-image"
@@ -82,7 +198,7 @@ const MessageInput = ({ selectedUser }) => {
               : "hover:bg-gray-200 text-gray-600"
           }`}
         >
-          <Image size={22} className="sm:size-25" />
+          <Image size={22} />
           <input
             type="file"
             id="chat-image"
@@ -91,6 +207,31 @@ const MessageInput = ({ selectedUser }) => {
             onChange={handleImageUpload}
           />
         </label>
+
+        {/* GIF Button */}
+        <button
+          ref={gifButtonRef}
+          onClick={() => setShowGifPicker(!showGifPicker)}
+          className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
+            theme === "dark"
+              ? "hover:bg-gray-800 text-gray-300"
+              : "hover:bg-gray-200 text-gray-600"
+          }`}
+        >
+          <div className="w-[22px] h-[22px] flex items-center justify-center font-bold text-xs">
+            GIF
+          </div>
+        </button>
+
+        {/* GIF Picker */}
+        {showGifPicker && (
+          <div className="gif-picker-container">
+            <GifPicker
+              onSelectGif={handleGifSelect}
+              onClose={() => setShowGifPicker(false)}
+            />
+          </div>
+        )}
 
         {/* Input Field */}
         <textarea
@@ -115,7 +256,7 @@ const MessageInput = ({ selectedUser }) => {
               : "bg-blue-500 hover:bg-blue-600 text-white"
           }`}
         >
-          <Send size={20} className="sm:size-23" />
+          <Send size={20} />
         </button>
       </div>
     </div>

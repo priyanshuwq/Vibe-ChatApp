@@ -1,22 +1,46 @@
 {
-  "name": "chat-app",
+  "name": "vibe-chat-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Real-time chat application with auto-deleting messages",
   "main": "index.js",
   "scripts": {
-  "build":"npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-  "start":"npm run start --prefix backend"
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/priyanshushekhar07/Vibe-ChatApp.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "chat",
+    "real-time",
+    "socket.io",
+    "mern",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/priyanshushekhar07/Vibe-ChatApp/issues"
   },
-  "homepage": "https://github.com/priyanshushekhar07/Vibe-ChatApp#readme"
+  "homepage": "https://github.com/priyanshushekhar07/Vibe-ChatApp#readme",
+  "dependencies": {
+    "@clerk/clerk-react": "^5.47.0",
+    "@clerk/nextjs": "^6.32.0",
+    "@react-oauth/google": "^0.12.2",
+    "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "crypto": "^1.0.1",
+    "framer-motion": "^12.23.22",
+    "jwt-decode": "^4.0.0",
+    "lottie-react": "^2.4.1"
+  }
 }

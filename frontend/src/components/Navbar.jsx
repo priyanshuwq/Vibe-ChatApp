@@ -21,7 +21,7 @@ const Navbar = () => {
         {/* Logo + Brand Name */}
         <Link
           to="/"
-          className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-all"
+          className="flex items-center gap-1 sm:gap-1.5 hover:opacity-80 transition-all"
         >
           {/* Animated Logo */}
           <motion.div
