@@ -69,13 +69,14 @@ export const sendMessage = async (req, res) => {
       const base64Length = image.length;
       const sizeInBytes = (base64Length * 3) / 4;
       const sizeInKB = sizeInBytes / 1024;
+      const sizeInMB = sizeInKB / 1024;
 
-      // Reject if larger than 1MB (1024KB)
-      if (sizeInKB > 1024) {
+      // Reject if larger than 2MB (more realistic for compressed images)
+      if (sizeInMB > 2) {
         return res.status(413).json({
           error: "File too large",
-          message: "Image must be less than 1MB",
-          size: `${sizeInKB.toFixed(2)}KB`,
+          message: "Image must be less than 2MB",
+          size: `${sizeInMB.toFixed(2)}MB`,
         });
       }
     }

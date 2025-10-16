@@ -46,13 +46,13 @@ const MessageInput = ({ selectedUser }) => {
 
       console.log(`Original image size: ${sizeKB.toFixed(2)}KB`);
 
-      // Compress to 500KB to ensure backend accepts it (1MB limit with safety margin)
+      // Compress to 1500KB to ensure backend accepts it (2MB limit with safety margin)
       try {
-        imageData = await compressImage(imageData, 500);
+        imageData = await compressImage(imageData, 1500);
         const finalSize = getBase64SizeKB(imageData);
         console.log(`Compressed image to: ${finalSize.toFixed(2)}KB`);
 
-        if (finalSize > 900) {
+        if (finalSize > 1800) {
           alert(
             "Image is too large even after compression. Please try a smaller image."
           );
@@ -70,19 +70,19 @@ const MessageInput = ({ selectedUser }) => {
     reader.readAsDataURL(file);
   };
 
-  // Handle GIF selection with relaxed size limits (up to 500KB)
+  // Handle GIF selection with relaxed size limits (up to 1.5MB)
   const handleGifSelect = async (gifUrl) => {
     try {
       const response = await fetch(gifUrl);
       const blob = await response.blob();
 
-      // Check file size - max 500KB for safety
-      const maxSize = 500 * 1024; // 500KB
+      // Check file size - max 1.5MB for safety
+      const maxSize = 1500 * 1024; // 1.5MB
 
       console.log(`GIF blob size: ${(blob.size / 1024).toFixed(2)}KB`);
 
       if (blob.size > maxSize) {
-        alert("This GIF is too large (>500KB). Please select a smaller one.");
+        alert("This GIF is too large (>1.5MB). Please select a smaller one.");
         setShowGifPicker(false);
         return;
       }
@@ -95,14 +95,14 @@ const MessageInput = ({ selectedUser }) => {
 
         console.log(`GIF base64 size: ${sizeKB.toFixed(2)}KB`);
 
-        // If larger than 500KB, try to compress
-        if (sizeKB > 500) {
+        // If larger than 1500KB, try to compress
+        if (sizeKB > 1500) {
           try {
-            base64 = await compressImage(base64, 500);
+            base64 = await compressImage(base64, 1500);
             sizeKB = getBase64SizeKB(base64);
             console.log(`Compressed GIF to: ${sizeKB.toFixed(2)}KB`);
 
-            if (sizeKB > 900) {
+            if (sizeKB > 1800) {
               alert(
                 "This GIF is too large even after compression. Please select a smaller one."
               );

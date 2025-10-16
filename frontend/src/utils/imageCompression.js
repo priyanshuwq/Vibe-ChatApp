@@ -1,10 +1,10 @@
 /**
  * Compress an image/GIF to reduce file size
  * @param {string} base64 - Base64 encoded image
- * @param {number} maxSizeKB - Maximum size in KB (default 500KB for safety margin)
+ * @param {number} maxSizeKB - Maximum size in KB (default 1500KB to stay under 2MB limit)
  * @returns {Promise<string>} - Compressed base64 image
  */
-export const compressImage = async (base64, maxSizeKB = 500) => {
+export const compressImage = async (base64, maxSizeKB = 1500) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
 
