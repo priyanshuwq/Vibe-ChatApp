@@ -17,7 +17,7 @@ const NoChatSelected = () => {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="flex justify-center mb-4"
         >
-          <MessageSquare className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />
+          <MessageSquare className="w-10 h-10 sm:w-12 sm:h-12 text-gray-900 dark:text-gray-100" />
         </motion.div>
 
         {/* Welcome Text */}
