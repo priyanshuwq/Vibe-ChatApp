@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import ChatContainer from "../components/ChatContainer";
 import NoChatSelected from "../components/NoChatSelected";
 import { useAuthStore } from "../store/useAuthStore";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -17,12 +17,18 @@ const HomePage = () => {
       <div className="flex items-center justify-center pt-20 px-4">
         <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-[calc(100vh-8rem)] overflow-hidden">
           <div className="flex h-full relative">
-            {isSidebarOpen && (
-              <div
-                className="sm:hidden fixed inset-0 z-30 bg-black/40"
-                onClick={() => setIsSidebarOpen(false)}
-              />
-            )}
+            <AnimatePresence>
+              {isSidebarOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="sm:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+                  onClick={() => setIsSidebarOpen(false)}
+                />
+              )}
+            </AnimatePresence>
 
             <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(false)} />
 
@@ -33,30 +39,44 @@ const HomePage = () => {
                   <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-tr from-gray-700/10 to-black/10 rounded-full blur-3xl"></div>
                 </div>
 
-                <button
-                  className="sm:hidden absolute left-4 top-4 p-2.5 rounded-xl bg-gradient-to-br from-base-200 to-base-300 hover:from-base-300 hover:to-base-200 border border-base-300 shadow-lg transition-all duration-300 hover:scale-105 z-10"
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="sm:hidden absolute left-4 top-4 p-2.5 rounded-xl bg-gradient-to-br from-base-200 to-base-300 hover:from-base-300 hover:to-base-200 border border-base-300 shadow-lg transition-all duration-300 z-10"
                   onClick={() => setIsSidebarOpen(true)}
                   aria-label="Open contacts"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-base-content">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                   </svg>
-                </button>
+                </motion.button>
 
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="space-y-6 relative z-10"
+                  className="space-y-8 relative z-10"
                 >
-                  <div className="space-y-3">
-                    <h1 className="text-4xl md:text-5xl font-bold text-base-content tracking-tight">
-                      Welcome,{" "}
-                      <span className="bg-gradient-to-r from-gray-700 via-gray-500 to-gray-400 dark:from-gray-300 dark:via-gray-400 dark:to-gray-500 bg-clip-text text-transparent font-extrabold">
+                  <div className="space-y-5">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <h1 className="text-4xl md:text-5xl font-normal text-base-content/80 tracking-wide">
+                        Welcome,
+                      </h1>
+                      <motion.h2
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="text-6xl md:text-8xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-50 dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent tracking-tight leading-none"
+                        style={{
+                          letterSpacing: '-0.03em',
+                          fontWeight: '800',
+                          WebkitTextStroke: '0.5px rgba(0,0,0,0.1)',
+                        }}
+                      >
                         {authUser?.fullName || "Guest"}
-                      </span>
-                    </h1>
-                    <p className="text-base-content/60 max-w-lg mx-auto text-base leading-relaxed font-light">
+                      </motion.h2>
+                    </div>
+                    <p className="text-base-content/60 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-light px-4" style={{ lineHeight: '1.618' }}>
                       Connect instantly with your network. Share moments, exchange ideas, and experience seamless real-time conversations.
                     </p>
                   </div>
