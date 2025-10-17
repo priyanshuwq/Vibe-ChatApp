@@ -20,16 +20,23 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
     <aside
       className={`
         fixed sm:static inset-y-0 left-0 z-40 
-        w-64 sm:w-72 
-        flex flex-col bg-base-100 shadow-lg
+        w-[85vw] sm:w-72 max-w-sm
+        flex flex-col bg-base-100 shadow-2xl
         sm:border-r sm:border-base-300 sm:rounded-none
-        rounded-r-2xl
-        transform transition-transform duration-300
+        m-0 sm:m-0
+        sm:mt-0 sm:mb-0 sm:ml-0
+        rounded-r-3xl sm:rounded-r-none
+        transform transition-all duration-500 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
       `}
+      style={{
+        top: isOpen ? '5rem' : '0',
+        bottom: isOpen ? '2rem' : '0',
+        height: isOpen ? 'calc(100vh - 7rem)' : '100%',
+      }}
     >
       {/* Sidebar Header */}
-      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-2xl sm:rounded-tr-none">
+      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-3xl sm:rounded-tr-none bg-base-100">
         <div className="flex items-center gap-3">
           <Users className="size-6 text-gray-900 dark:text-gray-100" />
           <span className="font-semibold hidden lg:block text-base-content text-lg">
@@ -37,17 +44,19 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
           </span>
         </div>
         {/* Close Button (mobile only) */}
-        <button
-          className="sm:hidden block p-1 rounded-full hover:bg-base-200 transition"
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="sm:hidden block p-2 rounded-full hover:bg-base-200 transition-all duration-200"
           aria-label="Close contacts"
           onClick={onToggle}
         >
           <X className="w-5 h-5" />
-        </button>
+        </motion.button>
       </div>
 
       {/* Contact List */}
-      <div className="overflow-y-auto w-full py-3 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-base-200">
+      <div className="overflow-y-auto w-full py-3 px-2 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-base-200 flex-1">
         <AnimatePresence>
           {users && users.length > 0 ? (
             users.map((user) => {
@@ -55,12 +64,19 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
               return (
                 <motion.button
                   key={user._id}
-                  onClick={() => setSelectedUser(user)}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden
+                  onClick={() => {
+                    setSelectedUser(user);
+                    if (window.innerWidth < 640) {
+                      onToggle();
+                    }
+                  }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden mb-2
   ${
     selectedUser?._id === user._id
       ? "bg-gray-900/10 dark:bg-gray-100/10 shadow-md scale-[1.02] before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-gray-900 dark:before:bg-gray-100 before:rounded-r-md before:shadow-[0_0_10px_rgba(0,0,0,0.3)]"
