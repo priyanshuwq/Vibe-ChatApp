@@ -28,9 +28,9 @@ const Navbar = () => {
             initial={{ rotate: -10, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="bg-primary/10 p-1.5 sm:p-2 rounded-xl shadow-md"
+            className="bg-gray-900/10 dark:bg-gray-100/10 p-1.5 sm:p-2 rounded-xl shadow-md"
           >
-            <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+            <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 dark:text-gray-100" />
           </motion.div>
 
           {/* Brand Name */}
@@ -38,9 +38,9 @@ const Navbar = () => {
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-lg sm:text-xl font-extrabold tracking-wide text-primary"
+            className="text-lg sm:text-xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100"
           >
-            Vibe Chat
+           VibeChat
           </motion.h1>
         </Link>
 
@@ -58,7 +58,7 @@ const Navbar = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-900 dark:border-gray-100 shadow-md"
               />
               <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-base-300 text-[10px] sm:text-xs text-base-content px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg whitespace-nowrap">
                 {authUser.fullName || "My Profile"}
@@ -72,7 +72,7 @@ const Navbar = () => {
               to="/settings"
               className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-base-200 border border-base-300 hover:bg-base-300 hover:scale-110 transition-all shadow-md"
             >
-              <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900 dark:text-gray-100" />
             </Link>
           )}
 
