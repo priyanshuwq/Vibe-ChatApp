@@ -48,7 +48,7 @@ const HomePage = () => {
                       transition={{ duration: 0.2 }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="md:hidden absolute left-4 top-16 p-2.5 rounded-xl bg-base-200/80 hover:bg-base-300/80 backdrop-blur-md border border-base-300 shadow-lg transition-all duration-300 z-10"
+                      className="md:hidden fixed left-4 top-20 p-2.5 rounded-xl bg-base-200/80 hover:bg-base-300/80 backdrop-blur-md border border-base-300 shadow-lg transition-all duration-300 z-50"
                       onClick={() => setIsSidebarOpen(true)}
                       aria-label="Open contacts"
                       style={{ touchAction: 'manipulation' }}
@@ -64,18 +64,18 @@ const HomePage = () => {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="space-y-4 sm:space-y-8 relative z-10 w-full px-2"
+                  className="space-y-4 sm:space-y-8 relative z-0 w-full px-4 mt-16 sm:mt-0"
                 >
-                  <div className="space-y-3 sm:space-y-5">
+                  <div className="space-y-3 sm:space-y-5 text-center">
                     <div className="flex flex-col items-center justify-center gap-1 sm:gap-2">
-                      <h1 className="text-2xl sm:text-4xl md:text-5xl font-normal text-base-content/80 tracking-wide">
+                      <h1 className="text-3xl sm:text-4xl md:text-5xl font-normal text-base-content/80 tracking-wide text-center">
                         Welcome,
                       </h1>
                       <motion.h2
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-3xl sm:text-6xl md:text-8xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-50 dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent tracking-tight leading-none px-2"
+                        className="text-5xl sm:text-6xl md:text-8xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-50 dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent tracking-tight leading-none text-center w-full break-words px-2"
                         style={{
                           letterSpacing: '-0.03em',
                           fontWeight: '800',
@@ -85,7 +85,7 @@ const HomePage = () => {
                         {authUser?.fullName || "Guest"}
                       </motion.h2>
                     </div>
-                    <p className="text-base-content/60 max-w-2xl mx-auto text-sm sm:text-base md:text-lg leading-relaxed font-light px-4" style={{ lineHeight: '1.618' }}>
+                    <p className="text-base-content/60 max-w-2xl mx-auto text-base sm:text-base md:text-lg leading-relaxed font-light text-center px-2" style={{ lineHeight: '1.618' }}>
                       Connect instantly with your network. Share moments, exchange ideas, and experience seamless real-time conversations.
                     </p>
                   </div>
@@ -113,10 +113,10 @@ const HomePage = () => {
                       className="flex items-start gap-3"
                     >
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                        A
+                        P
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-start">
-                        <span className="text-xs text-gray-400">alice@demo.com</span>
+                        <span className="text-xs text-gray-400">pss@demo.com</span>
                         <div className="bg-gray-800 text-gray-100 px-4 py-2 rounded-2xl rounded-tl-md text-sm">
                           Hi there!
                         </div>
@@ -124,7 +124,7 @@ const HomePage = () => {
                       </div>
                     </motion.div>
 
-                    {/* Message 2 - Munni */}
+                    {/* Message 2 - Sam */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -132,10 +132,10 @@ const HomePage = () => {
                       className="flex items-start gap-3 flex-row-reverse"
                     >
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                        M
+                        S
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-end">
-                        <span className="text-xs text-gray-400">munni@demo.com</span>
+                        <span className="text-xs text-gray-400">sam@demo.com</span>
                         <div className="bg-gray-700 text-gray-100 px-4 py-2 rounded-2xl rounded-tr-md text-sm">
                           Hello, how are you?
                         </div>
@@ -143,7 +143,7 @@ const HomePage = () => {
                       </div>
                     </motion.div>
 
-                    {/* Message 3 - Alice */}
+                    {/* Message 3 - PSS */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -151,10 +151,10 @@ const HomePage = () => {
                       className="flex items-start gap-3"
                     >
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                        A
+                        P
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-start">
-                        <span className="text-xs text-gray-400">alice@demo.com</span>
+                        <span className="text-xs text-gray-400">pss@demo.com</span>
                         <div className="bg-gray-800 text-gray-100 px-4 py-2 rounded-2xl rounded-tl-md text-sm">
                           I'm good, thanks!
                         </div>
@@ -162,7 +162,7 @@ const HomePage = () => {
                       </div>
                     </motion.div>
 
-                    {/* Message 4 - Munni */}
+                    {/* Message 4 - Sam */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -170,10 +170,10 @@ const HomePage = () => {
                       className="flex items-start gap-3 flex-row-reverse"
                     >
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                        M
+                        S
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-end">
-                        <span className="text-xs text-gray-400">munni@demo.com</span>
+                        <span className="text-xs text-gray-400">sam@demo.com</span>
                         <div className="bg-gray-700 text-gray-100 px-4 py-2 rounded-2xl rounded-tr-md text-sm">
                           Great!
                         </div>
