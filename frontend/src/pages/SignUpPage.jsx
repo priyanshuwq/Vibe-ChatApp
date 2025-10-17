@@ -88,7 +88,13 @@ export default function SignUpPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           onSubmit={handleSubmit}
-          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-700"
+          className="mt-8 space-y-6 backdrop-blur-3xl backdrop-saturate-200 p-8 rounded-2xl shadow-2xl border border-white/20"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(50px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(50px) saturate(200%)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+          }}
         >
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -101,7 +107,7 @@ export default function SignUpPage() {
               onChange={(e) => setFullName(e.target.value)}
               placeholder="John Doe"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
+              className="input input-bordered w-full bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all"
             />
           </div>
 
@@ -116,7 +122,7 @@ export default function SignUpPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@gmail.com"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600"
+              className="input input-bordered w-full bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all"
             />
           </div>
 
@@ -132,7 +138,7 @@ export default function SignUpPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600 pr-12"
+              className="input input-bordered w-full bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all pr-12"
             />
             <button
               type="button"
@@ -155,7 +161,7 @@ export default function SignUpPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600 pr-12"
+              className="input input-bordered w-full bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all pr-12"
             />
             <button
               type="button"
@@ -171,7 +177,7 @@ export default function SignUpPage() {
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 border-none hover:from-gray-800 hover:to-gray-900"
+            className="w-full py-3 px-4 text-white font-semibold rounded-lg bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/15 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             {loading ? (
               <span className="loading loading-spinner loading-sm"></span>
