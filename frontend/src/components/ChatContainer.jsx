@@ -81,13 +81,16 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
         }`}
       >
         {/* Mobile menu button - left, does not overlap avatar */}
-        <button
-          className="sm:hidden inline-flex items-center justify-center p-2 rounded-full border border-gray-300 bg-white text-gray-700 shadow"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="md:hidden inline-flex items-center justify-center p-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 shadow"
           onClick={onOpenSidebar}
           aria-label="Open contacts"
+          style={{ touchAction: 'manipulation' }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-        </button>
+        </motion.button>
         <img
           src={selectedUser?.profilePic || "/avatar.png"}
           alt="User"
@@ -136,7 +139,7 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
                 <div
                   className={`relative max-w-[80%] sm:max-w-[70%] px-3 sm:px-4 py-2 rounded-2xl shadow-md transition-all duration-300 ${
                     isSender
-                      ? "bg-blue-500 text-white rounded-br-none"
+                      ? "bg-gray-700 text-gray-100 rounded-br-none"
                       : theme === "dark"
                       ? "bg-[#1e1e1e] text-gray-100 rounded-bl-none"
                       : "bg-white text-gray-900 rounded-bl-none"
@@ -174,7 +177,7 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
                   <span
                     className={`block text-right mt-1 text-[10px] sm:text-[11px] ${
                       isSender
-                        ? "text-white/70"
+                        ? "text-gray-300"
                         : theme === "dark"
                         ? "text-gray-400"
                         : "text-gray-600"
