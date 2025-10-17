@@ -35,7 +35,7 @@ const ChatHeader = () => {
             "https://cdn-icons-png.flaticon.com/512/149/149071.png"
           }
           alt={selectedUser.fullName}
-          className="w-10 h-10 rounded-full border border-primary/40 shadow-sm"
+          className="w-10 h-10 rounded-full border border-gray-900/40 dark:border-gray-100/40 shadow-sm"
         />
         {/* Snapchat-style Star Badge on selected admin (mobile only) */}
         {isAdminSelected && (
