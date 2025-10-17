@@ -106,9 +106,9 @@ const GifPicker = ({ onSelectGif, onClose }) => {
             onChange={handleSearchChange}
             className={`w-full py-1.5 pl-8 pr-4 ${
               theme === "dark"
-                ? "bg-[#2b2b2b] text-white placeholder:text-gray-400"
+                ? "bg-[#2b2b2b] text-gray-100 placeholder:text-gray-400"
                 : "bg-gray-100 text-gray-900 placeholder:text-gray-500"
-            } focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md text-sm`}
+            } focus:outline-none focus:ring-1 focus:ring-gray-500 rounded-md text-sm`}
           />
         </div>
         <button
@@ -130,8 +130,8 @@ const GifPicker = ({ onSelectGif, onClose }) => {
             className={`text-xs px-3 py-1.5 rounded-full ${
               search === category
                 ? theme === "dark"
-                  ? "bg-blue-600 text-white"
-                  : "bg-blue-500 text-white"
+                  ? "bg-gray-600 text-gray-100"
+                  : "bg-gray-700 text-white"
                 : theme === "dark"
                 ? "bg-[#2b2b2b] text-gray-300 hover:bg-[#333]"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
