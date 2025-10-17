@@ -27,7 +27,7 @@ const ThemeToggle = () => {
         className="absolute inset-0 pointer-events-none rounded-full"
         animate={{
           boxShadow: isDark
-            ? "0 0 24px rgba(59,130,246,0.35) inset, 0 0 10px rgba(59,130,246,0.25)"
+            ? "0 0 24px rgba(0, 0, 0, 0.35) inset, 0 0 10px rgba(247, 248, 250, 0.88)"
             : "0 0 24px rgba(251,191,36,0.35) inset, 0 0 10px rgba(251,191,36,0.25)",
           opacity: 0.65,
         }}
