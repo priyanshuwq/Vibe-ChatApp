@@ -14,8 +14,8 @@ const HomePage = () => {
 
   return (
     <div className="h-screen bg-base-200 transition-colors duration-300">
-      <div className="flex items-center justify-center pt-20 px-4">
-        <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-[calc(100vh-8rem)] overflow-hidden">
+      <div className="flex items-center justify-center sm:pt-20 pt-4 px-2 sm:px-4">
+        <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-[calc(100vh-2rem)] sm:h-[calc(100vh-8rem)] overflow-hidden">
           <div className="flex h-full relative">
             <AnimatePresence>
               {isSidebarOpen && (
@@ -24,7 +24,7 @@ const HomePage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="sm:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+                  className="md:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
                   onClick={() => setIsSidebarOpen(false)}
                 />
               )}
@@ -33,40 +33,49 @@ const HomePage = () => {
             <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(false)} />
 
             {!selectedUser ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-10 bg-gradient-to-br from-base-100 via-base-100 to-base-200/50 transition-all duration-300 relative overflow-hidden">
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-3 sm:p-6 space-y-4 sm:space-y-10 bg-gradient-to-br from-base-100 via-base-100 to-base-200/50 transition-all duration-300 relative overflow-hidden">
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-gray-900/10 to-gray-800/10 rounded-full blur-3xl"></div>
                   <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-tr from-gray-700/10 to-black/10 rounded-full blur-3xl"></div>
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="sm:hidden absolute left-4 top-4 p-2.5 rounded-xl bg-gradient-to-br from-base-200 to-base-300 hover:from-base-300 hover:to-base-200 border border-base-300 shadow-lg transition-all duration-300 z-10"
-                  onClick={() => setIsSidebarOpen(true)}
-                  aria-label="Open contacts"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-base-content">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                  </svg>
-                </motion.button>
+                <AnimatePresence>
+                  {!isSidebarOpen && (
+                    <motion.button
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="md:hidden absolute left-4 top-16 p-2.5 rounded-xl bg-base-200/80 hover:bg-base-300/80 backdrop-blur-md border border-base-300 shadow-lg transition-all duration-300 z-10"
+                      onClick={() => setIsSidebarOpen(true)}
+                      aria-label="Open contacts"
+                      style={{ touchAction: 'manipulation' }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-base-content">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                      </svg>
+                    </motion.button>
+                  )}
+                </AnimatePresence>
 
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="space-y-8 relative z-10"
+                  className="space-y-4 sm:space-y-8 relative z-10 w-full px-2"
                 >
-                  <div className="space-y-5">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <h1 className="text-4xl md:text-5xl font-normal text-base-content/80 tracking-wide">
+                  <div className="space-y-3 sm:space-y-5">
+                    <div className="flex flex-col items-center justify-center gap-1 sm:gap-2">
+                      <h1 className="text-2xl sm:text-4xl md:text-5xl font-normal text-base-content/80 tracking-wide">
                         Welcome,
                       </h1>
                       <motion.h2
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-6xl md:text-8xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-50 dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent tracking-tight leading-none"
+                        className="text-3xl sm:text-6xl md:text-8xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-gray-50 dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent tracking-tight leading-none px-2"
                         style={{
                           letterSpacing: '-0.03em',
                           fontWeight: '800',
@@ -76,7 +85,7 @@ const HomePage = () => {
                         {authUser?.fullName || "Guest"}
                       </motion.h2>
                     </div>
-                    <p className="text-base-content/60 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-light px-4" style={{ lineHeight: '1.618' }}>
+                    <p className="text-base-content/60 max-w-2xl mx-auto text-sm sm:text-base md:text-lg leading-relaxed font-light px-4" style={{ lineHeight: '1.618' }}>
                       Connect instantly with your network. Share moments, exchange ideas, and experience seamless real-time conversations.
                     </p>
                   </div>
