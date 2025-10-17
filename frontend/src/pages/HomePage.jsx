@@ -13,9 +13,9 @@ const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen bg-base-200 transition-colors duration-300">
-      <div className="flex items-center justify-center sm:pt-20 pt-4 px-2 sm:px-4">
-        <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-[calc(100vh-2rem)] sm:h-[calc(100vh-8rem)] overflow-hidden">
+    <div className="h-screen bg-base-200 transition-colors duration-300 pt-14 sm:pt-16">
+      <div className="flex items-center justify-center h-full px-2 sm:px-4 py-2 sm:py-4">
+        <div className="bg-base-100 rounded-2xl shadow-2xl border border-base-300 w-full max-w-6xl h-full overflow-hidden">
           <div className="flex h-full relative">
             <AnimatePresence>
               {isSidebarOpen && (
@@ -48,7 +48,7 @@ const HomePage = () => {
                       transition={{ duration: 0.2 }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="md:hidden fixed left-4 top-20 p-2.5 rounded-xl bg-base-200/80 hover:bg-base-300/80 backdrop-blur-md border border-base-300 shadow-lg transition-all duration-300 z-50"
+                      className="md:hidden fixed left-3 sm:left-4 top-[4.5rem] sm:top-20 p-2 sm:p-2.5 rounded-xl bg-base-200/80 hover:bg-base-300/80 backdrop-blur-md border border-base-300 shadow-lg transition-all duration-300 z-50"
                       onClick={() => setIsSidebarOpen(true)}
                       aria-label="Open contacts"
                       style={{ touchAction: 'manipulation' }}
@@ -95,7 +95,7 @@ const HomePage = () => {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="relative bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 shadow-2xl w-full max-w-lg border border-gray-800 transition-all duration-300 hover:shadow-3xl z-10"
+                  className="relative bg-gray-900 dark:bg-gray-950 rounded-2xl p-4 sm:p-6 shadow-2xl w-full max-w-[90%] sm:max-w-lg border border-gray-800 transition-all duration-300 hover:shadow-3xl z-10"
                 >
                   <div className="flex items-center gap-2 mb-6">
                     <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>

@@ -127,14 +127,14 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 px-4 flex justify-center pb-10">
-      <div className="w-full max-w-3xl space-y-6">
+    <div className="min-h-screen pt-16 sm:pt-24 px-3 sm:px-4 flex justify-center pb-10">
+      <div className="w-full max-w-3xl space-y-4 sm:space-y-6">
         {/* Title */}
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-2xl font-bold text-center bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
+          className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
         >
           Account Settings
         </motion.h2>
@@ -144,7 +144,7 @@ const SettingsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 shadow-md"
+          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 shadow-md"
         >
           {/* Avatar */}
           <div className="flex flex-col items-center gap-3">
@@ -210,7 +210,7 @@ const SettingsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-6 shadow-md"
+          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-4 sm:p-6 shadow-md"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
             <div className="flex items-center gap-2">
@@ -414,7 +414,7 @@ const SettingsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-6 shadow-md flex flex-col items-center text-center space-y-4"
+          className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-4 sm:p-6 shadow-md flex flex-col items-center text-center space-y-3 sm:space-y-4"
         >
           {/* Coffee Animation */}
           {coffeeAnimation ? (

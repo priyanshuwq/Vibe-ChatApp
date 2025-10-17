@@ -19,7 +19,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
   return (
     <aside
       className={`
-        fixed md:static inset-y-0 left-0 z-40 
+        fixed md:static left-0 z-40 
         w-[85vw] md:w-72 max-w-sm
         flex flex-col bg-base-100 shadow-2xl
         md:border-r md:border-base-300 md:rounded-none
@@ -28,16 +28,16 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}
       style={{
-        top: isOpen ? 'max(1rem, env(safe-area-inset-top))' : '0',
-        bottom: isOpen ? 'max(1rem, env(safe-area-inset-bottom))' : '0',
-        height: isOpen ? 'calc(100vh - 2rem)' : '100%',
+        top: '0',
+        bottom: '0',
+        height: '100%',
       }}
     >
       {/* Sidebar Header */}
-      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-3xl md:rounded-tr-none bg-base-100 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <Users className="size-6 text-gray-900 dark:text-gray-100" />
-          <span className="font-semibold text-base-content text-lg">
+      <div className="border-b border-base-300 w-full px-3 sm:px-5 py-3 sm:py-4 flex items-center gap-2 sm:gap-3 justify-between rounded-tr-3xl md:rounded-tr-none bg-base-100 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Users className="size-5 sm:size-6 text-gray-900 dark:text-gray-100" />
+          <span className="font-semibold text-base-content text-base sm:text-lg">
             Contacts
           </span>
         </div>
