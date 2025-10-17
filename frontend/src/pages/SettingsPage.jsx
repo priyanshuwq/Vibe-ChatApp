@@ -4,6 +4,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Github, ExternalLink, Calendar, Info } from "lucide-react";
+import Lottie from "lottie-react";
 
 const SettingsPage = () => {
   const { authUser, updateProfile } = useAuthStore();
@@ -16,6 +17,7 @@ const SettingsPage = () => {
     longestStreak: "—",
     currentStreak: "—",
   });
+  const [coffeeAnimation, setCoffeeAnimation] = useState(null);
 
   const GITHUB_USERNAME = "priyanshuwq"; // Replace with your actual GitHub username
 
@@ -36,6 +38,14 @@ const SettingsPage = () => {
 
     observer.observe(document.documentElement, { attributes: true });
     return () => observer.disconnect();
+  }, []);
+
+  // Load coffee animation
+  useEffect(() => {
+    fetch("/Hot Smiling Coffee _ Good Morning.json")
+      .then((response) => response.json())
+      .then((data) => setCoffeeAnimation(data))
+      .catch((error) => console.error("Error loading animation:", error));
   }, []);
 
   useEffect(() => {
@@ -124,7 +134,7 @@ const SettingsPage = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-2xl font-bold text-center bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent"
+          className="text-2xl font-bold text-center bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
         >
           Account Settings
         </motion.h2>
@@ -144,7 +154,7 @@ const SettingsPage = () => {
                 "https://cdn-icons-png.flaticon.com/512/149/149071.png"
               }
               alt="Profile"
-              className="w-24 h-24 rounded-full border-2 border-primary object-cover shadow"
+              className="w-24 h-24 rounded-full border-2 border-gray-900 dark:border-gray-100 object-cover shadow"
             />
 
             {/* Hidden file input */}
@@ -211,7 +221,7 @@ const SettingsPage = () => {
               href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-primary hover:underline"
+              className="flex items-center gap-1 text-sm text-gray-900 dark:text-gray-100 hover:underline"
             >
               View Profile <ExternalLink size={14} />
             </a>
@@ -219,7 +229,7 @@ const SettingsPage = () => {
 
           {githubLoading ? (
             <div className="flex justify-center py-8">
-              <span className="loading loading-spinner loading-md text-primary"></span>
+              <span className="loading loading-spinner loading-md text-gray-900 dark:text-gray-100"></span>
             </div>
           ) : githubData ? (
             <div className="space-y-4">
@@ -406,38 +416,25 @@ const SettingsPage = () => {
           transition={{ duration: 0.7 }}
           className="bg-base-200/50 dark:bg-base-200/30 backdrop-blur-lg border border-base-300 rounded-2xl p-6 shadow-md flex flex-col items-center text-center space-y-4"
         >
-          {/* Coffee Icon with steam */}
-          <motion.div
-            className="relative"
-            animate={{ y: [0, -2, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <div className="w-12 h-12 bg-yellow-500 rounded-b-xl relative shadow">
-              <div className="absolute -right-3 top-2 w-4 h-6 border-4 border-yellow-500 rounded-full"></div>
+          {/* Coffee Animation */}
+          {coffeeAnimation ? (
+            <Lottie
+              animationData={coffeeAnimation}
+              loop={true}
+              autoplay={true}
+              style={{ width: 120, height: 120 }}
+            />
+          ) : (
+            <div className="w-[120px] h-[120px] flex items-center justify-center">
+              <div className="animate-pulse text-4xl">☕</div>
             </div>
-            {/* Steam */}
-            <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col gap-1">
-              {[...Array(3)].map((_, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: [0, 1, 0], y: [-5, -15, -25] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.5,
-                  }}
-                  className="w-2 h-6 mx-auto rounded-full bg-white/40"
-                />
-              ))}
-            </div>
-          </motion.div>
+          )}
 
           <h3 className="text-lg font-semibold">Support the Developer</h3>
           <p className="text-sm text-gray-500 max-w-md">
             If you enjoy using{" "}
             <span className="font-medium">Vibe Chat</span>, consider buying me a
-            coffee ☕. Your support helps improve this project 🚀
+            coffee.
           </p>
 
           <motion.a
@@ -446,7 +443,7 @@ const SettingsPage = () => {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-5 py-2 rounded-lg bg-primary text-white font-medium shadow hover:shadow-lg transition"
+            className="px-5 py-2 rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-medium shadow hover:shadow-lg transition"
           >
             Buy Me a Coffee
           </motion.a>
