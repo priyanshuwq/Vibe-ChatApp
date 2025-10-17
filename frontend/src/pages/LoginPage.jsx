@@ -103,7 +103,13 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mt-8 space-y-6 bg-gray-900/95 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-700"
+          className="mt-8 space-y-6 backdrop-blur-3xl backdrop-saturate-200 p-8 rounded-2xl shadow-2xl border border-white/20"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(50px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(50px) saturate(200%)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+          }}
           onSubmit={handleSubmit}
         >
           <div>
@@ -114,7 +120,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input input-bordered w-full bg-gray-800 text-white border-gray-600 focus:border-gray-400"
+              className="input input-bordered w-full bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all"
               placeholder="example@gmail.com"
               required
               autoComplete="email"
@@ -129,7 +135,7 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input input-bordered w-full pr-12 bg-gray-800 text-white border-gray-600 focus:border-gray-400"
+              className="input input-bordered w-full pr-12 bg-white/10 backdrop-blur-lg text-white border-white/20 focus:border-white/40 focus:outline-none placeholder:text-gray-400 transition-all"
               placeholder="••••••••"
               required
               autoComplete="current-password"
@@ -148,7 +154,7 @@ export default function LoginPage() {
             disabled={isLoggingIn}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="btn btn-primary w-full text-white font-semibold bg-gradient-to-r from-gray-700 to-gray-800 border-none hover:from-gray-800 hover:to-gray-900 disabled:opacity-50"
+            className="w-full py-3 px-4 text-white font-semibold rounded-lg bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/15 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             {isLoggingIn ? (
               <span className="loading loading-spinner loading-sm"></span>
