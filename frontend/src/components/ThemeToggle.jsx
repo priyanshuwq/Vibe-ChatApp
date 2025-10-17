@@ -27,8 +27,8 @@ const ThemeToggle = () => {
         className="absolute inset-0 pointer-events-none rounded-full"
         animate={{
           boxShadow: isDark
-            ? "0 0 24px rgba(0, 0, 0, 0.35) inset, 0 0 10px rgba(247, 248, 250, 0.88)"
-            : "0 0 24px rgba(251,191,36,0.35) inset, 0 0 10px rgba(251,191,36,0.25)",
+            ? "0 0 24px rgba(0, 0, 0, 0.35) inset, 0 0 10px rgba(156, 163, 175, 0.4)"
+            : "0 0 24px rgba(75, 85, 99, 0.2) inset, 0 0 10px rgba(75, 85, 99, 0.15)",
           opacity: 0.65,
         }}
         transition={{ duration: 0.4 }}
@@ -44,7 +44,7 @@ const ThemeToggle = () => {
         className="flex items-center justify-center"
       >
         {isDark ? (
-          <Moon className="w-5 h-5 text-blue-400" />
+          <Moon className="w-5 h-5 text-gray-300" />
         ) : (
           <Sun className="w-5 h-5 text-yellow-500" />
         )}
