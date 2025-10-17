@@ -19,27 +19,25 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
   return (
     <aside
       className={`
-        fixed sm:static inset-y-0 left-0 z-40 
-        w-[85vw] sm:w-72 max-w-sm
+        fixed md:static inset-y-0 left-0 z-40 
+        w-[85vw] md:w-72 max-w-sm
         flex flex-col bg-base-100 shadow-2xl
-        sm:border-r sm:border-base-300 sm:rounded-none
-        m-0 sm:m-0
-        sm:mt-0 sm:mb-0 sm:ml-0
-        rounded-r-3xl sm:rounded-r-none
+        md:border-r md:border-base-300 md:rounded-none
+        rounded-r-3xl md:rounded-r-none
         transform transition-all duration-500 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
+        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}
       style={{
-        top: isOpen ? '5rem' : '0',
-        bottom: isOpen ? '2rem' : '0',
-        height: isOpen ? 'calc(100vh - 7rem)' : '100%',
+        top: isOpen ? 'max(1rem, env(safe-area-inset-top))' : '0',
+        bottom: isOpen ? 'max(1rem, env(safe-area-inset-bottom))' : '0',
+        height: isOpen ? 'calc(100vh - 2rem)' : '100%',
       }}
     >
       {/* Sidebar Header */}
-      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-3xl sm:rounded-tr-none bg-base-100">
+      <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-3xl md:rounded-tr-none bg-base-100 flex-shrink-0">
         <div className="flex items-center gap-3">
           <Users className="size-6 text-gray-900 dark:text-gray-100" />
-          <span className="font-semibold hidden lg:block text-base-content text-lg">
+          <span className="font-semibold text-base-content text-lg">
             Contacts
           </span>
         </div>
@@ -47,9 +45,10 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="sm:hidden block p-2 rounded-full hover:bg-base-200 transition-all duration-200"
+          className="md:hidden block p-2 rounded-full hover:bg-base-200 transition-all duration-200"
           aria-label="Close contacts"
           onClick={onToggle}
+          style={{ touchAction: 'manipulation' }}
         >
           <X className="w-5 h-5" />
         </motion.button>
@@ -66,7 +65,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
                   key={user._id}
                   onClick={() => {
                     setSelectedUser(user);
-                    if (window.innerWidth < 640) {
+                    if (window.innerWidth < 768) {
                       onToggle();
                     }
                   }}
@@ -76,6 +75,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  style={{ touchAction: 'manipulation' }}
                   className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden mb-2
   ${
     selectedUser?._id === user._id
