@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
       {/* Sidebar Header */}
       <div className="border-b border-base-300 w-full px-5 py-4 flex items-center gap-3 justify-between rounded-tr-2xl sm:rounded-tr-none">
         <div className="flex items-center gap-3">
-          <Users className="size-6 text-primary" />
+          <Users className="size-6 text-gray-900 dark:text-gray-100" />
           <span className="font-semibold hidden lg:block text-base-content text-lg">
             Contacts
           </span>
@@ -63,7 +63,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
                   className={`w-full p-3 flex items-center gap-3 rounded-xl transition-all duration-300 relative overflow-hidden
   ${
     selectedUser?._id === user._id
-      ? "bg-primary/15 shadow-md scale-[1.02] before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary before:rounded-r-md before:shadow-[0_0_10px_rgba(139,92,246,0.7)]"
+      ? "bg-gray-900/10 dark:bg-gray-100/10 shadow-md scale-[1.02] before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-gray-900 dark:before:bg-gray-100 before:rounded-r-md before:shadow-[0_0_10px_rgba(0,0,0,0.3)]"
       : "hover:bg-base-200 hover:shadow-sm"
   }`}
                 >
