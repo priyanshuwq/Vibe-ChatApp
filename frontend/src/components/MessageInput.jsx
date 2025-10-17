@@ -229,8 +229,8 @@ const MessageInput = ({ selectedUser }) => {
           rows={1}
           className={`flex-1 px-3 sm:px-4 py-1.5 sm:py-2 mx-2 sm:mx-3 rounded-xl border resize-none text-sm sm:text-base transition-all duration-300 focus:outline-none ${
             theme === "dark"
-              ? "bg-[#2b2b2b] text-white placeholder-gray-400 border-gray-700 focus:border-blue-500"
-              : "bg-gray-100 text-gray-900 placeholder-gray-500 border-gray-300 focus:border-blue-500"
+              ? "bg-[#2b2b2b] text-gray-100 placeholder-gray-400 border-gray-700 focus:border-gray-500"
+              : "bg-gray-100 text-gray-900 placeholder-gray-500 border-gray-300 focus:border-gray-500"
           }`}
         />
 
@@ -239,8 +239,8 @@ const MessageInput = ({ selectedUser }) => {
           onClick={handleSend}
           className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
+              ? "bg-gray-700 hover:bg-gray-600 text-gray-100"
+              : "bg-gray-800 hover:bg-gray-700 text-white"
           }`}
         >
           <Send size={20} />
