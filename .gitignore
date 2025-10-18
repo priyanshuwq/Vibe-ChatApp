@@ -43,3 +43,6 @@ Thumbs.db
 # Misc
 coverage/
 .nyc_output/
+
+# GitHub
+.github/
