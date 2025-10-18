@@ -68,17 +68,11 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
 
   return (
     <div
-      className={`flex flex-col h-full w-full transition-colors duration-300 ${
-        theme === "dark" ? "bg-[#0f0f0f]" : "bg-gray-100"
-      }`}
+      className={`flex flex-col h-full w-full min-h-0 transition-colors duration-300 bg-base-200`}
     >
       {/* Chat Header */}
       <div
-        className={`px-3 sm:px-5 py-2 sm:py-3 flex items-center gap-2 sm:gap-3 border-b shadow-md transition-colors duration-300 ${
-          theme === "dark"
-            ? "bg-[#1f1f1f] border-gray-800"
-            : "bg-white border-gray-200"
-        }`}
+        className={`sticky top-0 z-10 px-3 sm:px-5 py-2 sm:py-3 flex items-center gap-2 sm:gap-3 border-b shadow-md transition-colors duration-300 bg-base-100 border-base-300`}
       >
         {/* Mobile menu button - left, does not overlap avatar */}
         <motion.button
@@ -115,7 +109,7 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
       </div>
 
       {/* Messages Section */}
-      <div className="flex-1 overflow-y-auto px-3 py-2 sm:px-5 sm:py-4 space-y-3 sm:space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+  <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2 sm:px-5 sm:py-4 space-y-3 sm:space-y-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent chat-wallpaper">
         {isMessagesLoading ? (
           <p
             className={`text-center text-sm sm:text-base ${
@@ -203,11 +197,7 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
 
       {/* Message Input */}
       <div
-        className={`border-t transition-colors duration-300 px-3 sm:px-5 py-2 sm:py-3 ${
-          theme === "dark"
-            ? "border-gray-800 bg-[#1f1f1f]"
-            : "border-gray-200 bg-white"
-        }`}
+        className={`sticky bottom-0 z-10 border-t transition-colors duration-300 px-3 sm:px-5 py-2 sm:py-3 bg-base-100 border-base-300`}
       >
         <MessageInput selectedUser={selectedUser} />
       </div>
