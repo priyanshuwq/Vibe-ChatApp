@@ -148,11 +148,7 @@ const MessageInput = ({ selectedUser }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 p-2 sm:p-3 transition-colors duration-300 ${
-        theme === "dark"
-          ? "bg-[#1f1f1f] border-gray-700"
-          : "bg-white border-gray-300"
-      }`}
+      className={`flex flex-col gap-2 p-2 sm:p-3 transition-colors duration-300 bg-base-100`}
     >
       {/* Image Preview */}
       {preview && (
@@ -181,7 +177,7 @@ const MessageInput = ({ selectedUser }) => {
           htmlFor="chat-image"
           className={`cursor-pointer p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
             theme === "dark"
-              ? "hover:bg-gray-800 text-gray-300"
+              ? "hover:bg-[#23232b] text-gray-300"
               : "hover:bg-gray-200 text-gray-600"
           }`}
         >
@@ -201,7 +197,7 @@ const MessageInput = ({ selectedUser }) => {
           onClick={() => setShowGifPicker(!showGifPicker)}
           className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
             theme === "dark"
-              ? "hover:bg-gray-800 text-gray-300"
+              ? "hover:bg-[#23232b] text-gray-300"
               : "hover:bg-gray-200 text-gray-600"
           }`}
         >
@@ -227,10 +223,10 @@ const MessageInput = ({ selectedUser }) => {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
           rows={1}
-          className={`flex-1 px-3 sm:px-4 py-1.5 sm:py-2 mx-2 sm:mx-3 rounded-xl border resize-none text-sm sm:text-base transition-all duration-300 focus:outline-none ${
+          className={`flex-1 px-3 sm:px-4 py-1.5 sm:py-2 mx-2 sm:mx-3 rounded-xl resize-none text-sm sm:text-base transition-all duration-300 focus:outline-none ${
             theme === "dark"
-              ? "bg-[#2b2b2b] text-gray-100 placeholder-gray-400 border-gray-700 focus:border-gray-500"
-              : "bg-gray-100 text-gray-900 placeholder-gray-500 border-gray-300 focus:border-gray-500"
+              ? "bg-[#23232b] text-gray-100 placeholder-gray-400 border-none"
+              : "bg-gray-100 text-gray-900 placeholder-gray-500 border-none"
           }`}
         />
 
@@ -239,7 +235,7 @@ const MessageInput = ({ selectedUser }) => {
           onClick={handleSend}
           className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
             theme === "dark"
-              ? "bg-gray-700 hover:bg-gray-600 text-gray-100"
+              ? "bg-[#23232b] hover:bg-[#2b2b2b] text-gray-300"
               : "bg-gray-800 hover:bg-gray-700 text-white"
           }`}
         >
