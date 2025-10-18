@@ -75,11 +75,34 @@ export const useChatStore = create((set, get) => ({
     socket.on("newMessage", (newMessage) => {
       const isMessageSentFromSelectedUser =
         newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
-
-      set({
-        messages: [...get().messages, newMessage],
+      
+      if (isMessageSentFromSelectedUser) {
+        // Add to current messages if chat is open
+        set({
+          messages: [...get().messages, newMessage],
+        });
+      }
+      
+      // Update last message time and re-sort users
+      const users = get().users.map((user) => {
+        if (user._id === newMessage.senderId || user._id === newMessage.receiverId) {
+          return {
+            ...user,
+            lastMessageTime: new Date().toISOString(),
+          };
+        }
+        return user;
       });
+
+      // Sort users by last message time (most recent first)
+      users.sort((a, b) => {
+        if (!a.lastMessageTime && !b.lastMessageTime) return 0;
+        if (!a.lastMessageTime) return 1;
+        if (!b.lastMessageTime) return -1;
+        return new Date(b.lastMessageTime) - new Date(a.lastMessageTime);
+      });
+
+      set({ users });
     });
   },
 
