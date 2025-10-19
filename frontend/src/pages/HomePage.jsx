@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import ChatContainer from "../components/ChatContainer";
 import NoChatSelected from "../components/NoChatSelected";
 import { useAuthStore } from "../store/useAuthStore";
+import { useThemeStore } from "../store/useThemeStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -10,7 +11,33 @@ import { useState } from "react";
 const HomePage = () => {
   const { selectedUser } = useChatStore();
   const { authUser } = useAuthStore();
+  const { theme } = useThemeStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Invert preview card theme relative to app theme
+  const isLight = theme === "light"; // app theme
+  const previewCardWrapper = `relative rounded-2xl p-4 sm:p-6 shadow-[0_4px_32px_0_rgba(0,0,0,0.12),0_1.5px_8px_0_rgba(0,0,0,0.10)] w-full max-w-[90%] sm:max-w-lg border transition-all duration-300 hover:shadow-3xl z-10 ${
+    isLight
+      ? "bg-gray-900 border-gray-800 text-gray-100"
+      : "bg-white border-gray-200 text-gray-800"
+  }`;
+  const previewInnerContainer = `flex flex-col gap-4 rounded-xl p-4 ${
+    isLight
+      ? "bg-black/30"
+      : "bg-gray-100/80 shadow-[0_2px_16px_0_rgba(0,0,0,0.18)]"
+  }`;
+  const headerTextClass = isLight ? "text-gray-200" : "text-gray-800";
+  const nameTextMuted = isLight ? "text-gray-400" : "text-gray-500";
+  const timeTextMuted = isLight ? "text-gray-500" : "text-gray-400";
+  const bubbleLeft = isLight
+    ? "bg-gray-800 text-gray-100 border border-gray-700"
+    : "bg-gray-100 text-gray-800 border border-gray-300";
+  const bubbleRight = isLight
+    ? "bg-gray-700 text-gray-100 border border-gray-700"
+    : "bg-gray-200 text-gray-800 border border-gray-300";
+  const avatarBase = "w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0";
+  const avatarDark = "bg-gradient-to-br from-gray-600 to-gray-700 text-white";
+  const avatarLight = "bg-gradient-to-br from-gray-300 to-gray-400 text-gray-800";
 
   return (
     <div className="h-screen bg-base-200 transition-colors duration-300 pt-14 sm:pt-16">
@@ -95,16 +122,16 @@ const HomePage = () => {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="relative bg-gray-900 dark:bg-gray-950 rounded-2xl p-4 sm:p-6 shadow-2xl w-full max-w-[90%] sm:max-w-lg border border-gray-800 transition-all duration-300 hover:shadow-3xl z-10"
+                  className={previewCardWrapper}
                 >
                   <div className="flex items-center gap-2 mb-6">
                     <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    <h2 className="text-base font-semibold text-gray-200">
+                    <h2 className={`text-base font-semibold ${headerTextClass}`}>
                       Chat Preview
                     </h2>
                   </div>
-                  
-                  <div className="flex flex-col gap-4 bg-black/30 rounded-xl p-4">
+
+                  <div className={previewInnerContainer}>
                     {/* Message 1 - Alice */}
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -112,15 +139,15 @@ const HomePage = () => {
                       transition={{ delay: 0.4 }}
                       className="flex items-start gap-3"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                      <div className={`${avatarBase} ${isLight ? avatarDark : avatarLight}`}>
                         P
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-start">
-                        <span className="text-xs text-gray-400">pss@demo.com</span>
-                        <div className="bg-gray-800 text-gray-100 px-4 py-2 rounded-2xl rounded-tl-md text-sm">
+                        <span className={`text-xs ${nameTextMuted}`}>pss@example.com</span>
+                        <div className={`${bubbleLeft} px-4 py-2 rounded-2xl rounded-tl-md text-sm`}>
                           Hi there!
                         </div>
-                        <span className="text-xs text-gray-500">01:05 PM</span>
+                        <span className={`text-xs ${timeTextMuted}`}>01:05 PM</span>
                       </div>
                     </motion.div>
 
@@ -131,15 +158,15 @@ const HomePage = () => {
                       transition={{ delay: 0.6 }}
                       className="flex items-start gap-3 flex-row-reverse"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                      <div className={`${avatarBase} ${isLight ? avatarDark : avatarLight}`}>
                         S
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-end">
-                        <span className="text-xs text-gray-400">sam@demo.com</span>
-                        <div className="bg-gray-700 text-gray-100 px-4 py-2 rounded-2xl rounded-tr-md text-sm">
+                        <span className={`text-xs ${nameTextMuted}`}>sam@example.com</span>
+                        <div className={`${bubbleRight} px-4 py-2 rounded-2xl rounded-tr-md text-sm`}>
                           Hello, how are you?
                         </div>
-                        <span className="text-xs text-gray-500">01:05 PM</span>
+                        <span className={`text-xs ${timeTextMuted}`}>01:05 PM</span>
                       </div>
                     </motion.div>
 
@@ -150,15 +177,15 @@ const HomePage = () => {
                       transition={{ delay: 0.8 }}
                       className="flex items-start gap-3"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                      <div className={`${avatarBase} ${isLight ? avatarDark : avatarLight}`}>
                         P
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-start">
-                        <span className="text-xs text-gray-400">pss@demo.com</span>
-                        <div className="bg-gray-800 text-gray-100 px-4 py-2 rounded-2xl rounded-tl-md text-sm">
+                        <span className={`text-xs ${nameTextMuted}`}>pss@example.com</span>
+                        <div className={`${bubbleLeft} px-4 py-2 rounded-2xl rounded-tl-md text-sm`}>
                           I'm good, thanks!
                         </div>
-                        <span className="text-xs text-gray-500">01:06 PM</span>
+                        <span className={`text-xs ${timeTextMuted}`}>01:06 PM</span>
                       </div>
                     </motion.div>
 
@@ -169,15 +196,15 @@ const HomePage = () => {
                       transition={{ delay: 1.0 }}
                       className="flex items-start gap-3 flex-row-reverse"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                      <div className={`${avatarBase} ${isLight ? avatarDark : avatarLight}`}>
                         S
                       </div>
                       <div className="flex flex-col gap-1 flex-1 items-end">
-                        <span className="text-xs text-gray-400">sam@demo.com</span>
-                        <div className="bg-gray-700 text-gray-100 px-4 py-2 rounded-2xl rounded-tr-md text-sm">
+                        <span className={`text-xs ${nameTextMuted}`}>sam@example.com</span>
+                        <div className={`${bubbleRight} px-4 py-2 rounded-2xl rounded-tr-md text-sm`}>
                           Great!
                         </div>
-                        <span className="text-xs text-gray-500">01:06 PM</span>
+                        <span className={`text-xs ${timeTextMuted}`}>01:06 PM</span>
                       </div>
                     </motion.div>
                   </div>

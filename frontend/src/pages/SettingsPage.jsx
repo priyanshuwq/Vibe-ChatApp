@@ -130,14 +130,14 @@ const SettingsPage = () => {
     <div className="min-h-screen pt-16 sm:pt-24 px-3 sm:px-4 flex justify-center pb-10">
       <div className="w-full max-w-3xl space-y-4 sm:space-y-6">
         {/* Title */}
-        <motion.h2
+        {/* <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent"
         >
           Account Settings
-        </motion.h2>
+        </motion.h2> */}
 
         {/* Profile Card */}
         <motion.div

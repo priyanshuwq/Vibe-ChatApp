@@ -14,15 +14,8 @@ import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
 
 const App = () => {
-
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
-  const { theme, setTheme } = useThemeStore();
-
-  // Always set theme on mount to ensure data-theme is correct
-  useEffect(() => {
-    setTheme(theme);
-    // eslint-disable-next-line
-  }, []);
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
