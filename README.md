@@ -2,6 +2,10 @@
 
  A real-time, Secure chat where each user can only access their own conversations, built with the MERN stack and featuring direct messaging, image sharing, GIF support, and a modern responsive UI.
 
+## Showcase
+<img width="1920" height="1080" alt="screenshot-2025-11-15_22-18-28" src="https://github.com/user-attachments/assets/a3611764-9ffe-4331-a546-a8206b8396e3" />
+
+
 ## Features
 
 - User authentication (signup, login) with JWT and httpOnly cookies  
@@ -136,11 +140,13 @@ The backend then exposes:
 - Cloudinary  
 - JWT authentication  
 
+---
 <div align = "center">
   If you found this useful, consider giving it a ⭐
 
 Made with ❤️ Priyanshu
 </div>
+
 
 
 
