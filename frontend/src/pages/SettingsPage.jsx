@@ -13,6 +13,7 @@ const SettingsPage = () => {
   const [loading, setLoading] = useState(false);
   const [githubData, setGithubData] = useState(null);
   const [githubLoading, setGithubLoading] = useState(false);
+  const [contribStats, setContribStats] = useState(null);
   const [coffeeAnimation, setCoffeeAnimation] = useState(null);
 
   const GITHUB_USERNAME = "priyanshuwq"; // Replace with your actual GitHub username
@@ -63,6 +64,26 @@ const SettingsPage = () => {
 
     fetchGithubData();
   }, []);
+
+  // Fetch live contribution stats (total, streaks, last contribution) from backend GitHub GraphQL API
+  useEffect(() => {
+    const fetchContribStats = async () => {
+      if (!GITHUB_USERNAME) return;
+      try {
+        const baseURL = import.meta.env.MODE === "development" 
+          ? "http://localhost:5001/api" 
+          : "/api";
+        const res = await fetch(`${baseURL}/github/contributions/${GITHUB_USERNAME}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setContribStats(data);
+      } catch (error) {
+        console.error("Error fetching contribution stats:", error);
+      }
+    };
+
+    fetchContribStats();
+  }, [GITHUB_USERNAME]);
 
   //  Handle file change and convert to base64
   const handleFileChange = async (e) => {
@@ -259,39 +280,13 @@ const SettingsPage = () => {
                   </div>
                 </div>
 
-                {/* GitHub Calendar - Full Width, No Scroll */}
+                {/* GitHub Calendar - Scrollable View */}
                 <div className="rounded-xl border border-base-300 overflow-hidden bg-base-100">
-                  <div className="p-3 sm:p-4 overflow-hidden">
-                    <style>{`
-                      .github-calendar {
-                        width: 100% !important;
-                        max-width: 100% !important;
-                        overflow: hidden !important;
-                      }
-                      .github-calendar svg {
-                        width: 100% !important;
-                        max-width: 100% !important;
-                        height: auto !important;
-                      }
-                      .github-calendar > div {
-                        overflow: hidden !important;
-                      }
-                      /* Hide the scrollbar from react-activity-calendar */
-                      .react-activity-calendar__scroll-container {
-                        overflow: hidden !important;
-                        max-width: 100% !important;
-                      }
-                      .react-activity-calendar__scroll-container::-webkit-scrollbar {
-                        display: none !important;
-                      }
-                      .react-activity-calendar__scroll-container {
-                        -ms-overflow-style: none !important;
-                        scrollbar-width: none !important;
-                      }
-                    `}</style>
+                  <div className="p-3 sm:p-4 pb-2">
                     <GitHubContributions 
                       username={githubData.login} 
                       compact={false}
+                      totalContributions={contribStats?.totalContributions}
                     />
                   </div>
                   {/* Small note and CTA */}
