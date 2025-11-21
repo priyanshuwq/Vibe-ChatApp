@@ -1,6 +1,6 @@
 # VibeChat
 
-Secure, real-time chat where each user can only access their own conversations, built with the MERN stack and featuring direct messaging, image sharing, GIF support, and a modern responsive UI.
+ A real-time, Secure chat where each user can only access their own conversations, built with the MERN stack and featuring direct messaging, image sharing, GIF support, and a modern responsive UI.
 
 ## Features
 
