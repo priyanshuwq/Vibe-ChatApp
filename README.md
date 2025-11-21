@@ -34,7 +34,13 @@ A real-time chat application built with the MERN stack featuring auto-deleting m
 - JWT Authentication
 - Node-cron (Auto cleanup)
 
-## Project Structure
+---
+<div align = "center">
+  If you found this useful, consider giving it a ⭐
+
+Made with ❤️ Priyanshu
+</div>
+
 
 
 
