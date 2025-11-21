@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Github, ExternalLink, Calendar, Info } from "lucide-react";
 import Lottie from "lottie-react";
+import GitHubContributions from "../components/GitHubContributions";
 
 const SettingsPage = () => {
   const { authUser, updateProfile } = useAuthStore();
@@ -12,11 +13,6 @@ const SettingsPage = () => {
   const [loading, setLoading] = useState(false);
   const [githubData, setGithubData] = useState(null);
   const [githubLoading, setGithubLoading] = useState(false);
-  const [contributionStats, setContributionStats] = useState({
-    totalContributions: "—",
-    longestStreak: "—",
-    currentStreak: "—",
-  });
   const [coffeeAnimation, setCoffeeAnimation] = useState(null);
 
   const GITHUB_USERNAME = "priyanshuwq"; // Replace with your actual GitHub username
@@ -49,39 +45,15 @@ const SettingsPage = () => {
   }, []);
 
   useEffect(() => {
+    // Fetch GitHub profile
     const fetchGithubData = async () => {
       setGithubLoading(true);
       try {
-        // Fetch basic GitHub profile data
-        const response = await fetch(
+        const profileRes = await fetch(
           `https://api.github.com/users/${GITHUB_USERNAME}`
         );
-        const data = await response.json();
-        setGithubData(data);
-
-        // Try to estimate contribution count from public activity
-        // Note: This is an approximation based on public repos and activity level
-        if (data.public_repos > 0) {
-          // This creates a simple estimate based on account age and activity
-          const creationDate = new Date(data.created_at);
-          const now = new Date();
-          const accountAgeInDays = Math.floor(
-            (now - creationDate) / (1000 * 60 * 60 * 24)
-          );
-          const estimatedContributions = Math.min(
-            Math.floor(
-              data.public_repos * (5 + Math.random() * 10) +
-                accountAgeInDays / 10
-            ),
-            1000
-          );
-
-          setContributionStats({
-            totalContributions: `~${estimatedContributions}`,
-            longestStreak: `~${Math.floor(Math.random() * 7 + 2)}`,
-            currentStreak: Math.random() > 0.5 ? "1" : "0",
-          });
-        }
+        const profile = await profileRes.json();
+        setGithubData(profile);
       } catch (error) {
         console.error("Error fetching GitHub data:", error);
       } finally {
@@ -272,7 +244,7 @@ const SettingsPage = () => {
                 </div>
               </div>
 
-              {/* GitHub Contribution Stats */}
+              {/* GitHub Contribution Graph */}
               <div className="mt-4 pt-4 border-t border-base-300">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -281,123 +253,50 @@ const SettingsPage = () => {
                   </div>
                   <div
                     className="tooltip tooltip-left"
-                    data-tip="GitHub API doesn't provide exact contribution stats. These are estimates."
+                    data-tip="Real-time contribution data from GitHub GraphQL API"
                   >
                     <Info size={14} className="text-gray-500" />
                   </div>
                 </div>
 
-                {/* Enhanced GitHub Stats Widget with Rounded Corners */}
-                <div className="rounded-xl border border-base-300 overflow-hidden bg-base-100 p-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-base-300">
-                    {/* Total Contributions */}
-                    <div className="p-4 text-center">
-                      <div className="text-2xl font-bold">
-                        {contributionStats.totalContributions}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        Est. Contributions
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-1">
-                        Since joining GitHub
-                      </div>
-                    </div>
-
-                    {/* Longest Streak */}
-                    <div className="p-4 text-center">
-                      <div className="text-2xl font-bold">
-                        {contributionStats.longestStreak}
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">
-                        Est. Longest Streak
-                      </div>
-                      <div className="text-[10px] text-gray-500 mt-1">
-                        Based on public activity
-                      </div>
-                    </div>
+                {/* GitHub Calendar - Full Width, No Scroll */}
+                <div className="rounded-xl border border-base-300 overflow-hidden bg-base-100">
+                  <div className="p-3 sm:p-4 overflow-hidden">
+                    <style>{`
+                      .github-calendar {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        overflow: hidden !important;
+                      }
+                      .github-calendar svg {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        height: auto !important;
+                      }
+                      .github-calendar > div {
+                        overflow: hidden !important;
+                      }
+                      /* Hide the scrollbar from react-activity-calendar */
+                      .react-activity-calendar__scroll-container {
+                        overflow: hidden !important;
+                        max-width: 100% !important;
+                      }
+                      .react-activity-calendar__scroll-container::-webkit-scrollbar {
+                        display: none !important;
+                      }
+                      .react-activity-calendar__scroll-container {
+                        -ms-overflow-style: none !important;
+                        scrollbar-width: none !important;
+                      }
+                    `}</style>
+                    <GitHubContributions 
+                      username={githubData.login} 
+                      compact={false}
+                    />
                   </div>
-
-                  {/* Live GitHub Contribution Graph */}
-                  <div className="p-2 sm:p-4 border-t border-base-300">
-                    <div className="rounded-xl overflow-hidden">
-                      {/* The GitHub contribution graph embedded in an iframe with proper styling */}
-                      <div className="relative w-full rounded-xl overflow-hidden">
-                        {/* Mobile optimized view - show full commit history with horizontal scroll */}
-                        <div className="block sm:hidden">
-                          <div className="overflow-x-auto pb-3 -mx-2 px-2">
-                            <div className="min-w-[900px]">
-                              <div className="aspect-[5/1] w-full rounded-xl overflow-hidden">
-                                <iframe
-                                  src={`https://ghchart.rshah.org/${theme === "dark" ? "" : "fff"}/${githubData.login}`}
-                                  style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    minWidth: "900px",
-                                    borderRadius: "12px",
-                                    backgroundColor:
-                                      theme === "dark"
-                                        ? "rgba(30,30,30,0.8)"
-                                        : "rgba(255,255,255,0.8)",
-                                  }}
-                                  frameBorder="0"
-                                  title="GitHub Contribution Graph (Mobile)"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Desktop view */}
-                        <div className="hidden sm:block aspect-[4/1]">
-                          <iframe
-                            src={`https://ghchart.rshah.org/${theme === "dark" ? "" : "fff"}/${githubData.login}`}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              borderRadius: "12px",
-                              backgroundColor:
-                                theme === "dark"
-                                  ? "rgba(30,30,30,0.8)"
-                                  : "rgba(255,255,255,0.8)",
-                            }}
-                            frameBorder="0"
-                            title="GitHub Contribution Graph"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Activity level legend */}
-                    <div className="flex justify-end items-center text-xs mt-3 flex-wrap">
-                      <span className="mr-2 text-gray-500">Less</span>
-                      {[0, 1, 2, 3, 4].map((level) => (
-                        <div
-                          key={level}
-                          className={`w-3 h-3 rounded-sm mx-0.5 ${
-                            level === 0
-                              ? theme === "dark"
-                                ? "bg-gray-800"
-                                : "bg-gray-200"
-                              : level === 1
-                              ? theme === "dark"
-                                ? "bg-emerald-900"
-                                : "bg-emerald-200"
-                              : level === 2
-                              ? theme === "dark"
-                                ? "bg-emerald-700"
-                                : "bg-emerald-300"
-                              : level === 3
-                              ? theme === "dark"
-                                ? "bg-emerald-500"
-                                : "bg-emerald-500"
-                              : theme === "dark"
-                              ? "bg-emerald-300"
-                              : "bg-emerald-600"
-                          }`}
-                        />
-                      ))}
-                      <span className="ml-2 text-gray-500">More</span>
-                    </div>
+                  {/* Small note and CTA */}
+                  <div className="p-3 border-t border-base-300 text-center text-xs text-gray-500">
+                    If you love my work, consider giving a star on <a href="https://github.com/priyanshuwq/Vibe-ChatApp" target="_blank" rel="noreferrer" className="underline">VibeChat</a>.
                   </div>
                 </div>
               </div>
