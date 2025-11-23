@@ -31,8 +31,8 @@
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/priyanshuwq/Vibe-ChatApp.git
-cd Vibe-ChatApp
+git clone https://github.com/priyanshuwq/VibeChat.git
+cd VibeChat
 ```
 
 ### 2. Install dependencies
@@ -145,6 +145,7 @@ The backend then exposes:
 
 Made with ❤️ Priyanshu
 </div>
+
 
 
 
