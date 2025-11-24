@@ -70,26 +70,24 @@ const MessageInput = ({ selectedUser }) => {
     reader.readAsDataURL(file);
   };
 
-  // Handle GIF selection - optimized for speed (direct URL, no conversion)
+  // Handle GIF selection - supports up to 2MB
   const handleGifSelect = async (gifUrl) => {
     try {
-      // For small GIFs, just use the URL directly (fastest approach)
-      // Convert to base64 only if needed
       const response = await fetch(gifUrl);
       const blob = await response.blob();
 
-      // Check file size - max 800KB for fast upload
-      const maxSize = 800 * 1024; // 800KB
+      // Max 2MB for GIFs (matches backend limit)
+      const maxSize = 2 * 1024 * 1024; // 2MB
 
       console.log(`GIF blob size: ${(blob.size / 1024).toFixed(2)}KB`);
 
       if (blob.size > maxSize) {
-        alert("This GIF is too large (>800KB). Please select a smaller one.");
+        alert("This GIF is too large (>2MB). Please select a smaller one.");
         setShowGifPicker(false);
         return;
       }
 
-      // Convert blob to base64 (fast, single pass)
+      // Convert blob to base64
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64 = reader.result;
@@ -97,9 +95,9 @@ const MessageInput = ({ selectedUser }) => {
 
         console.log(`GIF base64 size: ${sizeKB.toFixed(2)}KB`);
 
-        // Quick validation without heavy compression
-        if (sizeKB > 1000) {
-          alert("This GIF is too large. Please select a smaller one.");
+        // Validate against 2MB limit
+        if (sizeKB > 2048) {
+          alert("This GIF is too large (>2MB). Please select a smaller one.");
           setShowGifPicker(false);
           return;
         }
