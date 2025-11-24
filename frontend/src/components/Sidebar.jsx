@@ -104,7 +104,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
       </div>
 
   {/* Contact List */}
-  <div className="overflow-y-auto overscroll-contain w-full py-3 px-2 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-base-200 flex-1 min-h-0">
+  <div className="overflow-y-auto overscroll-contain w-full py-3 px-2 hide-scrollbar flex-1 min-h-0">
         <AnimatePresence>
           {filteredUsers && filteredUsers.length > 0 ? (
             filteredUsers.map((user) => {
