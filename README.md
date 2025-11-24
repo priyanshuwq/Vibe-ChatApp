@@ -26,6 +26,7 @@
 - npm
 - MongoDB instance (local or Atlas)
 - Cloudinary account (for image storage)
+- Giphy API key (for GIF picker feature)
 - GitHub personal access token (for GitHub contribution stats on the Settings page)
 
 ### 1. Clone the repository
@@ -85,8 +86,19 @@ Use `backend/.env.example` as a reference.
 
 #### Frontend
 
-If you later add environment variables for the frontend, follow Vite's convention (`VITE_...`) and create `frontend/.env`.  
-Currently, the frontend reads the backend base URL from `import.meta.env.MODE` and does not require extra keys for local development.
+Create `frontend/.env` and set:
+
+```bash
+# Get your free API key from: https://developers.giphy.com/dashboard/
+VITE_GIPHY_API_KEY=your-giphy-api-key
+```
+
+Use `frontend/.env.example` as a reference.
+
+**Note:** To get a Giphy API key:
+1. Go to [Giphy Developers Dashboard](https://developers.giphy.com/dashboard/)
+2. Create a new app and select "API" type
+3. Copy the API key and paste it in your `.env` file
 
 ### 4. Run the app in development
 
