@@ -1,11 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { useChatStore } from "../store/useChatStore";
 import ThemeToggle from "./ThemeToggle";
 import { LogOut, Settings, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const { setSelectedUser } = useChatStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,13 +17,21 @@ const Navbar = () => {
   // Default Avatar if user hasn't uploaded one
   const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
+  // Handle logo click - navigate to home and close any open chat
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    setSelectedUser(null);
+    navigate("/");
+  };
+
   return (
     <header className="bg-base-200/30 border-b border-base-300 fixed w-full top-0 z-40 backdrop-blur-sm">
       <div className="container mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between">
         {/* Logo + Brand Name */}
-        <Link
-          to="/"
-          className="flex items-center gap-1 sm:gap-1.5 hover:opacity-80 transition-all"
+        <a
+          href="/"
+          onClick={handleLogoClick}
+          className="flex items-center gap-1 sm:gap-1.5 hover:opacity-80 transition-all cursor-pointer"
         >
           {/* Animated Logo */}
           <motion.div
@@ -42,7 +52,7 @@ const Navbar = () => {
           >
            VibeChat
           </motion.h1>
-        </Link>
+        </a>
 
         {/* Right Section */}
         <div className="flex items-center gap-3 sm:gap-4">
@@ -60,6 +70,12 @@ const Navbar = () => {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-900 dark:border-gray-100 shadow-md"
               />
+              {authUser.isAdmin && (
+                <span
+                  className="absolute top-0 right-0 size-2.5 sm:size-3 rounded-full bg-yellow-400 ring-2 ring-yellow-400/20 shadow-md shadow-yellow-400/30 animate-pulse"
+                  title="Admin"
+                />
+              )}
               <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-base-300 text-[10px] sm:text-xs text-base-content px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg whitespace-nowrap">
                 {authUser.fullName || "My Profile"}
               </span>
@@ -85,7 +101,7 @@ const Navbar = () => {
                   logout();
                   navigate("/login");
                 }}
-                className="hidden sm:flex btn btn-sm btn-error gap-2 hover:scale-105 transition-transform"
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/90 dark:bg-red-600/90 hover:bg-red-600 dark:hover:bg-red-700 text-white text-sm font-medium transition-all hover:scale-105 shadow-md"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
@@ -97,7 +113,7 @@ const Navbar = () => {
                   logout();
                   navigate("/login");
                 }}
-                className="sm:hidden flex items-center justify-center w-9 h-9 rounded-full bg-error text-white hover:bg-red-600 transition"
+                className="sm:hidden flex items-center justify-center w-9 h-9 rounded-full bg-red-500/90 dark:bg-red-600/90 hover:bg-red-600 dark:hover:bg-red-700 text-white transition shadow-md"
               >
                 <LogOut className="w-4 h-4" />
               </button>

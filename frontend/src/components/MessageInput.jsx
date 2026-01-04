@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useThemeStore } from "../store/useThemeStore";
-import { Image, Send, X } from "lucide-react";
+import { Image, Send, X, Smile } from "lucide-react";
 import GifPicker from "./GifPicker";
 import { compressImage, getBase64SizeKB } from "../utils/imageCompression";
 
@@ -13,9 +13,19 @@ const MessageInput = ({ selectedUser }) => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [showGifPicker, setShowGifPicker] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const gifButtonRef = useRef(null);
+  const emojiButtonRef = useRef(null);
+  const textareaRef = useRef(null);
 
-  // Close gif picker when clicking outside
+  // Common emojis for quick access (WhatsApp-style)
+  const commonEmojis = [
+    "😊", "😂", "❤️", "🔥", "👍", "😍", "🎉", "😎", 
+    "🙏", "👏", "💯", "🤔", "😢", "😭", "😡", "🥰",
+    "😘", "😜", "🤗", "😇", "🤩", "😴", "🙄", "😏"
+  ];
+
+  // Close pickers when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -26,13 +36,21 @@ const MessageInput = ({ selectedUser }) => {
       ) {
         setShowGifPicker(false);
       }
+      if (
+        showEmojiPicker &&
+        emojiButtonRef.current &&
+        !emojiButtonRef.current.contains(event.target) &&
+        !event.target.closest(".emoji-picker-container")
+      ) {
+        setShowEmojiPicker(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showGifPicker]);
+  }, [showGifPicker, showEmojiPicker]);
 
   // Handle image upload with fast compression
   const handleImageUpload = async (e) => {
@@ -136,6 +154,20 @@ const MessageInput = ({ selectedUser }) => {
     }
   };
 
+  // Handle emoji selection
+  const handleEmojiSelect = (emoji) => {
+    const cursorPosition = textareaRef.current?.selectionStart || text.length;
+    const newText = text.slice(0, cursorPosition) + emoji + text.slice(cursorPosition);
+    setText(newText);
+    
+    // Keep focus on textarea
+    setTimeout(() => {
+      textareaRef.current?.focus();
+      const newPosition = cursorPosition + emoji.length;
+      textareaRef.current?.setSelectionRange(newPosition, newPosition);
+    }, 0);
+  };
+
   // Handle Enter key press
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -192,7 +224,10 @@ const MessageInput = ({ selectedUser }) => {
         {/* GIF Button */}
         <button
           ref={gifButtonRef}
-          onClick={() => setShowGifPicker(!showGifPicker)}
+          onClick={() => {
+            setShowGifPicker(!showGifPicker);
+            setShowEmojiPicker(false);
+          }}
           className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
             theme === "dark"
               ? "hover:bg-[#23232b] text-gray-300"
@@ -202,6 +237,22 @@ const MessageInput = ({ selectedUser }) => {
           <div className="w-[22px] h-[22px] flex items-center justify-center font-bold text-xs">
             GIF
           </div>
+        </button>
+
+        {/* Emoji Button */}
+        <button
+          ref={emojiButtonRef}
+          onClick={() => {
+            setShowEmojiPicker(!showEmojiPicker);
+            setShowGifPicker(false);
+          }}
+          className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${
+            theme === "dark"
+              ? "hover:bg-[#23232b] text-gray-300"
+              : "hover:bg-gray-200 text-gray-600"
+          }`}
+        >
+          <Smile size={22} />
         </button>
 
         {/* GIF Picker */}
@@ -214,8 +265,36 @@ const MessageInput = ({ selectedUser }) => {
           </div>
         )}
 
+        {/* Emoji Picker */}
+        {showEmojiPicker && (
+          <div className="emoji-picker-container absolute bottom-full left-0 mb-2 z-50">
+            <div
+              className={`rounded-2xl shadow-2xl border p-3 w-[280px] max-h-[300px] overflow-y-auto ${
+                theme === "dark"
+                  ? "bg-[#1e1e1e] border-gray-700"
+                  : "bg-white border-gray-300"
+              }`}
+            >
+              <div className="grid grid-cols-8 gap-2">
+                {commonEmojis.map((emoji, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleEmojiSelect(emoji)}
+                    className={`text-2xl hover:scale-125 transition-transform p-1 rounded ${
+                      theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Input Field */}
         <textarea
+          ref={textareaRef}
           placeholder="Type a message..."
           value={text}
           onChange={(e) => setText(e.target.value)}

@@ -146,22 +146,19 @@ const Sidebar = ({ isOpen = true, onToggle = () => {} }) => {
                     {isOnline && (
                       <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-base-100 animate-ping"></span>
                     )}
+                    {(user.isAdmin === true || user.isAdmin === 'true') && (
+                      <span
+                        className="absolute top-0 right-0 size-3 rounded-full bg-yellow-400 ring-2 ring-yellow-400/20 shadow-md shadow-yellow-400/30 animate-pulse"
+                        title="Admin"
+                      />
+                    )}
                   </div>
 
                   {/* User Info */}
                   <div className="flex flex-col text-left min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-medium text-base-content truncate text-sm flex items-center gap-1">
+                      <span className="font-medium text-base-content truncate text-sm">
                         {user.fullName}
-                        {(user.isAdmin === true || user.isAdmin === 'true') && (
-                          <span
-                            className="px-1.5 py-0.5 rounded-full bg-black text-white border border-yellow-400 text-[10px] font-semibold ml-1 admin-badge-shine"
-                            style={{ fontSize: '0.75em', lineHeight: '1.1', position: 'relative', overflow: 'hidden' }}
-                            title="Admin"
-                          >
-                            Admin
-                          </span>
-                        )}
                       </span>
                     </div>
                     <span

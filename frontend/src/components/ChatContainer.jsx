@@ -257,9 +257,9 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`flex ${isSender ? "justify-end" : "justify-start"} group`}
+                className={`flex ${isSender ? "justify-end" : "justify-start"} group w-full`}
               >
-                <div className="flex items-start gap-2">
+                <div className={`flex items-start gap-2 ${isSender ? "flex-row-reverse" : ""}`}>
                   {canSelect && (
                     <button
                       onClick={() => toggleMessageSelection(msg._id)}
@@ -274,56 +274,76 @@ const ChatContainer = ({ onOpenSidebar = () => {} }) => {
                   )}
                   
                   <div
-                    className={`relative max-w-[80%] sm:max-w-[70%] px-3 sm:px-4 py-2 rounded-2xl shadow-md transition-all duration-300 ${
+                    className={`relative max-w-[85%] sm:max-w-[75%] rounded-lg shadow-md transition-all duration-300 ${
                       isSelected ? "ring-2 ring-blue-500" : ""
                     } ${
+                      msg.image 
+                        ? "p-1" // Minimal padding for images
+                        : "px-3 sm:px-4 py-2" // Standard padding for text
+                    } ${
                       isSender
-                        ? "bg-gray-700 text-gray-100 rounded-br-none"
+                        ? "bg-gray-700 text-gray-100 rounded-br-sm"
                         : theme === "dark"
-                        ? "bg-[#1e1e1e] text-gray-100 rounded-bl-none"
-                        : "bg-white text-gray-900 rounded-bl-none"
+                        ? "bg-[#1e1e1e] text-gray-100 rounded-bl-sm"
+                        : "bg-white text-gray-900 rounded-bl-sm"
                     }`}
                   >
-                    {/* Message Text */}
-                    {msg.text && (
-                      <p className="text-sm sm:text-[15px] leading-relaxed break-words mb-1">
-                        {msg.text}
-                      </p>
+                    {/* Message Text with inline timestamp */}
+                    {msg.text && !msg.image && (
+                      <div className="inline-block">
+                        <p className="text-sm sm:text-[15px] leading-relaxed break-words inline pr-2">
+                          {msg.text}{" "}
+                          <span
+                            className={`text-[10px] sm:text-[11px] whitespace-nowrap align-bottom inline-block ml-1 ${
+                              isSender
+                                ? "text-gray-300"
+                                : theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {dayjs(msg.createdAt).format("h:mm A")}
+                          </span>
+                        </p>
+                      </div>
                     )}
 
                     {/* Image Message */}
                     {msg.image && (
-                      <div className="mt-2">
+                      <div className="relative">
+                        {/* Text above image if both exist */}
+                        {msg.text && (
+                          <p className="text-sm sm:text-[15px] leading-relaxed break-words mb-2 px-2">
+                            {msg.text}
+                          </p>
+                        )}
+                        
                         {failedImages[msg.image] ? (
-                          <div className="w-full max-w-[180px] sm:max-w-xs rounded-lg bg-gray-800 border border-gray-600 p-4 flex flex-col items-center justify-center">
+                          <div className="w-full max-w-[200px] sm:max-w-[280px] rounded-md bg-gray-800 border border-gray-600 p-4 flex flex-col items-center justify-center">
                             <ImageOff className="w-8 h-8 text-gray-400 mb-2" />
                             <p className="text-xs text-gray-400">
                               Image unavailable
                             </p>
                           </div>
                         ) : (
-                          <img
-                            src={msg.image}
-                            alt="attachment"
-                            className="w-full max-w-[180px] sm:max-w-xs rounded-lg shadow-md border border-gray-600 object-cover"
-                            onError={() => handleImageError(msg.image)}
-                          />
+                          <div className="relative">
+                            <img
+                              src={msg.image}
+                              alt="attachment"
+                              className="w-full max-w-[200px] sm:max-w-[280px] rounded-md border border-gray-700/30 object-cover"
+                              style={{ borderWidth: '0.5px' }}
+                              onError={() => handleImageError(msg.image)}
+                            />
+                            {/* Timestamp Overlay on Image */}
+                            <div className="absolute bottom-1 right-1 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm">
+                              <span className="text-[10px] sm:text-[11px] text-white font-medium">
+                                {dayjs(msg.createdAt).format("h:mm A")}
+                              </span>
+                            </div>
+                          </div>
                         )}
                       </div>
                     )}
-
-                    {/* Timestamp */}
-                    <span
-                      className={`block text-right mt-1 text-[10px] sm:text-[11px] ${
-                        isSender
-                          ? "text-gray-300"
-                          : theme === "dark"
-                          ? "text-gray-400"
-                          : "text-gray-600"
-                      }`}
-                    >
-                      {dayjs(msg.createdAt).format("MMM D, h:mm A")}
-                    </span>
                   </div>
                 </div>
               </motion.div>

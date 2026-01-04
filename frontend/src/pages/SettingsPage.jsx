@@ -141,14 +141,22 @@ const SettingsPage = () => {
         >
           {/* Avatar */}
           <div className="flex flex-col items-center gap-3">
-            <img
-              src={
-                preview ||
-                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-              }
-              alt="Profile"
-              className="w-24 h-24 rounded-full border-2 border-gray-900 dark:border-gray-100 object-cover shadow"
-            />
+            <div className="relative">
+              <img
+                src={
+                  preview ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
+                alt="Profile"
+                className="w-24 h-24 rounded-full border-2 border-gray-900 dark:border-gray-100 object-cover shadow"
+              />
+              {authUser?.isAdmin && (
+                <span
+                  className="absolute top-0 right-0 size-4 rounded-full bg-yellow-400 ring-2 ring-yellow-400/20 shadow-md shadow-yellow-400/30 animate-pulse"
+                  title="Admin"
+                />
+              )}
+            </div>
 
             {/* Hidden file input */}
             <input
@@ -172,14 +180,6 @@ const SettingsPage = () => {
           <div className="flex-1 text-center sm:text-left space-y-2">
             <div className="flex items-center justify-center sm:justify-start gap-2">
               <h3 className="text-lg font-semibold">{authUser?.fullName}</h3>
-              {authUser?.isAdmin && (
-                <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-semibold bg-black text-yellow-400 border border-yellow-400 rounded-full shadow-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-yellow-400">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
-                  </svg>
-                  Admin
-                </span>
-              )}
             </div>
             <p className="text-sm text-gray-500">{authUser?.email}</p>
 
